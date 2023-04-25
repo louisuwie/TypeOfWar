@@ -18,13 +18,12 @@
 */
 
 /*
-    GameServer.java instantiates the server and starts the game. This instantiates for the Hosts' side.
+    GameStarter.java instantiates the game for the Player Side.
 */
 
-public class GameServer {
-    public static void main(String[] args) {
-        System.out.println("Hello world!");
+public class GameStarter {
 
-        GameFrame runGame = new GameFrame();
+        public static void main(String[] args) {
+            System.out.println("Hello world!");
+        }
     }
-}
