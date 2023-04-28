@@ -70,5 +70,7 @@ public class GameFrame {
 
         });
         }
+
+        //TODO Add game graphics. Rope, Player Icons, Background, etc. Must be taken from GameCanvas, right?
     }
 

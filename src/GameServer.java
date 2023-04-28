@@ -26,5 +26,7 @@ public class GameServer {
         System.out.println("Hello world!");
 
         GameFrame runGame = new GameFrame();
+
+        //TODO add server code here, must be able to instantiate a server- for both player and client side
     }
 }

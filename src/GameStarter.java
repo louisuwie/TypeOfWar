@@ -26,4 +26,6 @@ public class GameStarter {
         public static void main(String[] args) {
             System.out.println("Hello world!");
         }
+
+        //TODO create a client code here, must be able to instantiate a client- for both player and client side
     }

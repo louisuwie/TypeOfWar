@@ -22,4 +22,6 @@
 */
 
 public class GameCanvas {
+
+        //TODO graphics-side code here, maybe import all the graphics-related files such as img, sound, gif, etc.
 }

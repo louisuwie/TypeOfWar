@@ -23,4 +23,6 @@
 */
 
 public class Player {
+
+    //TODO player-side code here, must be able to communicate with client and server. Outgoing and incoming functions.
 }
