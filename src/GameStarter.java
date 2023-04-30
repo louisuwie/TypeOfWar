@@ -28,4 +28,5 @@ public class GameStarter {
         }
 
         //TODO create a client code here, must be able to instantiate a client- for both player and client side
+
     }

@@ -50,8 +50,7 @@ public class GameFrame {
         gameUI.setVisible(true);
         gameUI.setResizable(false);
 
-        /* FRAME FEATURES
-         */
+        /* FRAME FEATURES */
 
         //if Start button is clicked, it makes the button invisible and the title invisible
         start.addActionListener(e -> {
