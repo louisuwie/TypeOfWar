@@ -22,7 +22,7 @@
     communicates with the host server.
 */
 
-public class Player {
+public class Player implements Runnable{
 
 	private String name;
 	private int speed;
@@ -50,5 +50,11 @@ public class Player {
 
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'run'");
 	}
 }
