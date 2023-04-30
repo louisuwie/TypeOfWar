@@ -32,42 +32,31 @@ public class GameFrame {
 
     public GameFrame(){
 
-        /*
-        INITIALISING OF VARIABLES
-         */
+        /* INITIALISING OF VARIABLES */
         JFrame gameUI = new JFrame("T.o.W");
-
         JLabel title = new JLabel("Are you ready to Type for War?");
-
         JButton start = new JButton("Start?");
 
-        /*
-        SPECIFIC DETAILING OF THE VARIABLES
-         */
+        /* SPECIFIC DETAILING OF THE VARIABLES */
         gameUI.setSize(1920,1080);
         gameUI.setDefaultCloseOperation(EXIT_ON_CLOSE);
         gameUI.setLayout(new FlowLayout());
 
-        /*
-        ADDING FEATURES INTO FRAME
-         */
+        /* ADDING FEATURES INTO FRAME */
         gameUI.add(title);
         gameUI.add(start);
 
-        /*
-        SET VISIBLE
-         */
+        /* SET VISIBLE */
         gameUI.setVisible(true);
+        gameUI.setResizable(false);
 
-        /*
-        FRAME FEATURES
+        /* FRAME FEATURES
          */
 
         //if Start button is clicked, it makes the button invisible and the title invisible
         start.addActionListener(e -> {
             start.setVisible(false);
             title.setVisible(false);
-
         });
         }
 

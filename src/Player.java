@@ -24,5 +24,31 @@
 
 public class Player {
 
-    //TODO player-side code here, must be able to communicate with client and server. Outgoing and incoming functions.
+	private String name;
+	private int speed;
+	private int clicks;
+
+	public Player(String n) {
+		this.speed = 1;
+		this.clicks = 1;
+		this.name = n;
+	}
+
+	// Methods for mutating
+	public void resetSpeed(int clicks) {
+		speed = clicks * 3;
+	}
+
+	// Some Accessor Methods
+	public int getSpeed() {
+		return speed;
+	}
+
+	public int getClicks() {
+		return clicks;
+	}
+
+	public String getName() {
+		return name;
+	}
 }

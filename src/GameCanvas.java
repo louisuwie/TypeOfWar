@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.*;
 /**
  @author Louis G. Binwag III (200747) & Maria Charmane Rose E. Naciongayo (214152)
  @version April 25, 2023
@@ -21,7 +23,10 @@
     GameCanvas.java handles the graphics-side of the program.
 */
 
-public class GameCanvas {
+public class GameCanvas extends JComponent{
 
         //TODO graphics-side code here, maybe import all the graphics-related files such as img, sound, gif, etc.
+		public GameCanvas() {
+			setPreferredSize(new Dimension(100,100)); // Numbers are placeholders!
+		}
 }
