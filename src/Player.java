@@ -1,3 +1,8 @@
+import java.io.DataInputStream;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
+import java.net.Socket;
+
 /**
  @author Louis G. Binwag III (200747) & Maria Charmane Rose E. Naciongayo (214152)
  @version April 25, 2023
@@ -32,6 +37,15 @@ public class Player implements Runnable{
 		this.speed = 1;
 		this.clicks = 1;
 		this.name = n;
+
+		// Setting up the socket for the Player instance
+		try {
+			Socket s = new Socket("localhost", 2000);
+			DataInputStream in = new DataInputStream(s.getInputStream());
+			DataOutputStream out = new DataOutputStream(s.getOutputStream());
+		} catch (Exception e) {
+			System.out.print("Unable to connect to game.");
+		}
 	}
 
 	// Methods for mutating
@@ -54,7 +68,7 @@ public class Player implements Runnable{
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		// TODO Write code for sending in data to the server program!
 		throw new UnsupportedOperationException("Unimplemented method 'run'");
 	}
 }

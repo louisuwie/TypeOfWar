@@ -28,23 +28,21 @@ public class GameServer {
     public static void main(String[] args) throws IOException {
         
 		// Add server code here, must be able to instantiate a server- for both player and client side
-		ServerSocket ss = new ServerSocket(0000); // Not too sure about the port number!
-		
+		ServerSocket ss = new ServerSocket(2000); // Not too sure about the port number!
 		Socket sp1 = ss.accept();
 		System.out.println("Player 1 connected. Waiting for Player 2..."); // System output muna! Not yet sure how to display this HAHA
 		Socket sp2 = ss.accept();
 		System.out.println("Player 2 connected. Launching game.");
-
 		Player p1 = new Player(null);
 		Player p2 = new Player(null);
-
 		Thread t1 = new Thread(p1);
 		Thread t2 = new Thread(p2);
 
-		GameFrame runGame = new GameFrame();
-		
+		// Not really sure where to put the start (if before or after starting the frame)
 		t1.start();
 		t2.start();
+
+		GameFrame runGame = new GameFrame(); // This should open up the frame after both
 		
 		/* This makes sure that the threads run and finish before the server progrma executes the succeeding lines. */
 		try {
