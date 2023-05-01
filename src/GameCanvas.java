@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 /**
  @author Louis G. Binwag III (200747) & Maria Charmane Rose E. Naciongayo (214152)
  @version April 25, 2023
@@ -25,8 +27,28 @@ import java.awt.*;
 
 public class GameCanvas extends JComponent{
 
-        //TODO graphics-side code here, maybe import all the graphics-related files such as img, sound, gif, etc.
+        // Graphics-side code here, maybe import all the graphics-related files such as img, sound, gif, etc.
 		public GameCanvas() {
-			setPreferredSize(new Dimension(100,100)); // Numbers are placeholders!
+			setPreferredSize(new Dimension(1000,1000)); // Numbers are placeholders!
+			setFocusable(true);
 		}
+
+
+		// Call this to start the key bindings
+		public void addKeyBindings() {
+			ActionMap am = getActionMap();
+			InputMap im = getInputMap();
+
+			// Define the Abstract Actions
+			AbstractAction sc = new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent ae) {
+					// TODO Code that is executed upon pressing the spacebar;
+				}
+			};
+
+			// Creating the Action
+			am.put("Spacebar Press", sc);
+			im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "Spacebar Press");
+        }
 }

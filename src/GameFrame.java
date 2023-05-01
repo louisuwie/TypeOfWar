@@ -33,9 +33,10 @@ public class GameFrame {
     public GameFrame(){
 
         /* INITIALISING OF VARIABLES */
-        JFrame gameUI = new JFrame("T.o.W");
+        JFrame gameUI = new JFrame("Type of War");
         JLabel title = new JLabel("Are you ready to Type for War?");
         JButton start = new JButton("Start?");
+        GameCanvas gc = new GameCanvas();
 
         /* SPECIFIC DETAILING OF THE VARIABLES */
         gameUI.setSize(1920,1080);
@@ -45,6 +46,9 @@ public class GameFrame {
         /* ADDING FEATURES INTO FRAME */
         gameUI.add(title);
         gameUI.add(start);
+        gameUI.add(gc);
+        gc.addKeyBindings();
+        gc.setVisible(false); // Hide the game stuff muna until the player STARTS
 
         /* SET VISIBLE */
         gameUI.setVisible(true);
@@ -56,9 +60,9 @@ public class GameFrame {
         start.addActionListener(e -> {
             start.setVisible(false);
             title.setVisible(false);
+            gc.setVisible(true);
         });
         }
+}
 
-        //TODO Add game graphics. Rope, Player Icons, Background, etc. Must be taken from GameCanvas, right?
-    }
 

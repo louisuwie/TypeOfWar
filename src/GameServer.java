@@ -29,29 +29,30 @@ public class GameServer {
         
 		// Add server code here, must be able to instantiate a server- for both player and client side
 		ServerSocket ss = new ServerSocket(2000); // Not too sure about the port number!
+		
+		// Initializing Input and Output streams for the two Player sockets
 		Socket sp1 = ss.accept();
+		DataInputStream in1 = new DataInputStream(sp1.getInputStream());
+		DataOutputStream out1 = new DataOutputStream(sp1.getOutputStream());
 		System.out.println("Player 1 connected. Waiting for Player 2..."); // System output muna! Not yet sure how to display this HAHA
 		Socket sp2 = ss.accept();
+		DataInputStream in2 = new DataInputStream(sp2.getInputStream());
+		DataOutputStream out2 = new DataOutputStream(sp2.getOutputStream());
 		System.out.println("Player 2 connected. Launching game.");
-		Player p1 = new Player(null);
-		Player p2 = new Player(null);
+
+		// Casting into threads
+		Player p1 = new Player();
+		Player p2 = new Player();
 		Thread t1 = new Thread(p1);
 		Thread t2 = new Thread(p2);
-
+		
+		GameFrame runGame = new GameFrame(); // This should open up the frame after both
+		
 		// Not really sure where to put the start (if before or after starting the frame)
 		t1.start();
 		t2.start();
 
-		GameFrame runGame = new GameFrame(); // This should open up the frame after both
-		
-		/* This makes sure that the threads run and finish before the server progrma executes the succeeding lines. */
-		try {
-            t1.join();
-            t2.join();
-        } catch (InterruptedException e) {
-            System.out.println("Game interrupted.");
-        }
-
+		// End of prgram
         ss.close();
 
 	}

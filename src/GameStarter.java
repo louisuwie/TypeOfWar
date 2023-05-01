@@ -21,12 +21,22 @@
     GameStarter.java instantiates the game for the Player Side.
 */
 
+import java.net.*;
+import java.io.*;
+
 public class GameStarter {
+	public static void main(String[] args) {
+		// Setting up the socket for the Player instance
+		try {
+			try (Socket s = new Socket("localhost", 2000)) {
+				DataInputStream in = new DataInputStream(s.getInputStream());
+				DataOutputStream out = new DataOutputStream(s.getOutputStream());
+			}
+		} catch (Exception e) {
+			System.out.print("Unable to connect to game.");
+		}
+	}
 
-        public static void main(String[] args) {
-            System.out.println("Hello world!");
-        }
+	//TODO create a client code here, must be able to instantiate a client- for both player and client side
 
-        //TODO create a client code here, must be able to instantiate a client- for both player and client side
-
-    }
+}

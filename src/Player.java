@@ -29,23 +29,12 @@ import java.net.Socket;
 
 public class Player implements Runnable{
 
-	private String name;
 	private int speed;
 	private int clicks;
 
-	public Player(String n) {
+	public Player() {
 		this.speed = 1;
 		this.clicks = 1;
-		this.name = n;
-
-		// Setting up the socket for the Player instance
-		try {
-			Socket s = new Socket("localhost", 2000);
-			DataInputStream in = new DataInputStream(s.getInputStream());
-			DataOutputStream out = new DataOutputStream(s.getOutputStream());
-		} catch (Exception e) {
-			System.out.print("Unable to connect to game.");
-		}
 	}
 
 	// Methods for mutating
@@ -60,10 +49,6 @@ public class Player implements Runnable{
 
 	public int getClicks() {
 		return clicks;
-	}
-
-	public String getName() {
-		return name;
 	}
 
 	@Override
