@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 /**
  @author Louis G. Binwag III (200747) & Maria Charmane Rose E. Naciongayo (214152)
  @version April 25, 2023
@@ -27,28 +26,33 @@ import java.awt.event.KeyEvent;
 
 public class GameCanvas extends JComponent{
 
-        // Graphics-side code here, maybe import all the graphics-related files such as img, sound, gif, etc.
-		public GameCanvas() {
-			setPreferredSize(new Dimension(1000,1000)); // Numbers are placeholders!
-			setFocusable(true);
-		}
+	// Graphics-side code here, maybe import all the graphics-related files such as img, sound, gif, etc.
+	public GameCanvas() {
+		setPreferredSize(new Dimension(1000,1000)); // Numbers are placeholders!
+		setFocusable(true);
+	}
 
+	@Override
+    protected void paintComponent(Graphics g2d) {
+		// Just some tester graphics!
+		g2d.setColor(Color.PINK);
+        g2d.fillRect(100,100, 100, 100);
+    }
 
-		// Call this to start the key bindings
-		public void addKeyBindings() {
-			ActionMap am = getActionMap();
-			InputMap im = getInputMap();
+	public void addKeyBindings() {
+		ActionMap am = getActionMap();
+		InputMap im = getInputMap();
 
-			// Define the Abstract Actions
-			AbstractAction sc = new AbstractAction() {
-				@Override
-				public void actionPerformed(ActionEvent ae) {
-					// TODO Code that is executed upon pressing the spacebar;
-				}
-			};
+		// Define the Abstract Actions
+		AbstractAction sc = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				// Code to be executed when spacebar is pressed!
+			}
+		};
 
-			// Creating the Action
-			am.put("Spacebar Press", sc);
-			im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "Spacebar Press");
-        }
+		// Creating the Action
+		am.put("Spacebar Press", sc);
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "Spacebar Press");
+	}
 }

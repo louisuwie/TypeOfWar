@@ -30,6 +30,8 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class GameFrame {
 
+    boolean gameVisibility = false;
+
     public GameFrame(){
 
         /* INITIALISING OF VARIABLES */
@@ -48,7 +50,7 @@ public class GameFrame {
         gameUI.add(start);
         gameUI.add(gc);
         gc.addKeyBindings();
-        gc.setVisible(false); // Hide the game stuff muna until the player STARTS
+        gc.setVisible(gameVisibility); // Hide the game stuff muna until the player STARTS
 
         /* SET VISIBLE */
         gameUI.setVisible(true);
@@ -60,8 +62,14 @@ public class GameFrame {
         start.addActionListener(e -> {
             start.setVisible(false);
             title.setVisible(false);
-            gc.setVisible(true);
+            gameVisibility = true;
+            gc.setVisible(gameVisibility);
         });
+        }
+
+        /* ACCESSOR METHODS */
+        public boolean getGameVisibility() {
+            return gameVisibility;
         }
 }
 

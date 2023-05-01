@@ -41,16 +41,18 @@ public class GameServer {
 		System.out.println("Player 2 connected. Launching game.");
 
 		// Casting into threads
-		Player p1 = new Player();
-		Player p2 = new Player();
+		GameStarter p1 = new GameStarter();
+		GameStarter p2 = new GameStarter();
 		Thread t1 = new Thread(p1);
 		Thread t2 = new Thread(p2);
-		
+
 		GameFrame runGame = new GameFrame(); // This should open up the frame after both
-		
-		// Not really sure where to put the start (if before or after starting the frame)
-		t1.start();
-		t2.start();
+
+		// This should start the client threads as soon as either player hits START.
+		if (runGame.getGameVisibility()) {
+			t1.start();
+			t2.start();
+		}
 
 		// End of prgram
         ss.close();

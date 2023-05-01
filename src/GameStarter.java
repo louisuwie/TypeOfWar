@@ -23,8 +23,12 @@
 
 import java.net.*;
 import java.io.*;
+import java.awt.event.*;
+import javax.swing.*;
 
-public class GameStarter {
+public class GameStarter implements Runnable {
+
+	Player p = new Player();
 	public static void main(String[] args) {
 		// Setting up the socket for the Player instance
 		try {
@@ -35,6 +39,18 @@ public class GameStarter {
 		} catch (Exception e) {
 			System.out.print("Unable to connect to game.");
 		}
+	}
+
+	@Override
+	public void run() {
+		Timer typeTimer = new Timer(1000, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				// There should be something that counts the clicks while the timer is running
+				p.resetSpeed(0); // Variable for number of clicks will replace the 0
+			}
+		});
+		typeTimer.start();
 	}
 
 	//TODO create a client code here, must be able to instantiate a client- for both player and client side

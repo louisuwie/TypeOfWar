@@ -1,7 +1,5 @@
-import java.io.DataInputStream;
-import java.io.DataOutput;
-import java.io.DataOutputStream;
-import java.net.Socket;
+import java.awt.event.*;
+import javax.swing.*;;
 
 /**
  @author Louis G. Binwag III (200747) & Maria Charmane Rose E. Naciongayo (214152)
@@ -27,7 +25,7 @@ import java.net.Socket;
     communicates with the host server.
 */
 
-public class Player implements Runnable{
+public class Player {
 
 	private int speed;
 	private int clicks;
@@ -49,11 +47,5 @@ public class Player implements Runnable{
 
 	public int getClicks() {
 		return clicks;
-	}
-
-	@Override
-	public void run() {
-		// TODO Write code for sending in data to the server program!
-		throw new UnsupportedOperationException("Unimplemented method 'run'");
 	}
 }
