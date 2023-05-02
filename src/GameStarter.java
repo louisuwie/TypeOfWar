@@ -31,8 +31,9 @@ public class GameStarter implements Runnable {
 	Player p = new Player();
 	public static void main(String[] args) {
 		// Setting up the socket for the Player instance
+		// TODO Make an input thingy for the IP Address (in console)
 		try {
-			try (Socket s = new Socket("localhost", 2000)) {
+			try (Socket s = new Socket("54.208.43.191", 2000)) {
 				DataInputStream in = new DataInputStream(s.getInputStream());
 				DataOutputStream out = new DataOutputStream(s.getOutputStream());
 			}

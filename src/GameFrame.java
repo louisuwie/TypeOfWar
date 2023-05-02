@@ -35,7 +35,7 @@ public class GameFrame {
     public GameFrame(){
 
         /* INITIALISING OF VARIABLES */
-        JFrame gameUI = new JFrame("Type of War");
+        JFrame gameUI = new JFrame("Type of War"); // Move to Client program
         JLabel title = new JLabel("Are you ready to Type for War?");
         JButton start = new JButton("Start?");
         GameCanvas gc = new GameCanvas();

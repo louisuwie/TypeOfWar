@@ -21,6 +21,16 @@
     GameServer.java instantiates the server and starts the game. This instantiates for the Hosts' side.
 */
 
+/* LAUNCH TERMINAL AT PEM FOLDER
+ * TYPE chmod 400 TestKey001.pem
+ * ssh -i "TestKey001.pem" ec2-user@ec2-54-208-43-191.compute-1.amazonaws.com
+ * install Git
+ * git clone https://github.com/louisuwie/TypeOfWar.git
+ * install then run Java
+ * Compile game files
+ * Run1!!!! YAYYY
+*/
+
 import java.io.*;
 import java.net.*;
 
