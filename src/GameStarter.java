@@ -1,3 +1,7 @@
+import java.net.*;
+import java.io.*;
+import java.awt.event.*;
+import javax.swing.*;
 /**
  @author Louis G. Binwag III (200747) & Maria Charmane Rose E. Naciongayo (214152)
  @version April 25, 2023
@@ -21,10 +25,6 @@
     GameStarter.java instantiates the game for the Player Side.
 */
 
-import java.net.*;
-import java.io.*;
-import java.awt.event.*;
-import javax.swing.*;
 
 public class GameStarter implements Runnable {
 

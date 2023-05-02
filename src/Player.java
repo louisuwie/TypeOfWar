@@ -1,5 +1,3 @@
-import java.awt.event.*;
-import javax.swing.*;;
 
 /**
  @author Louis G. Binwag III (200747) & Maria Charmane Rose E. Naciongayo (214152)

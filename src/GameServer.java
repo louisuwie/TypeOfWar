@@ -1,3 +1,5 @@
+import java.io.*;
+import java.net.*;
 /**
  @author Louis G. Binwag III (200747) & Maria Charmane Rose E. Naciongayo (214152)
  @version April 25, 2023
@@ -21,8 +23,6 @@
     GameServer.java instantiates the server and starts the game. This instantiates for the Hosts' side.
 */
 
-import java.io.*;
-import java.net.*;
 
 public class GameServer {
     public static void main(String[] args) throws IOException {

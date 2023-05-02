@@ -1,3 +1,6 @@
+import javax.swing.*;
+import java.awt.*;
+
 /**
  @author Louis G. Binwag III (200747) & Maria Charmane Rose E. Naciongayo (214152)
  @version April 25, 2023
@@ -22,11 +25,6 @@
 */
 
 
-import javax.swing.*;
-import java.awt.*;
-
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
-
 
 public class GameFrame {
 
@@ -42,7 +40,7 @@ public class GameFrame {
 
         /* SPECIFIC DETAILING OF THE VARIABLES */
         gameUI.setSize(1920,1080);
-        gameUI.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        gameUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameUI.setLayout(new FlowLayout());
 
         /* ADDING FEATURES INTO FRAME */
