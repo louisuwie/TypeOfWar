@@ -35,6 +35,7 @@ public class GameServer {
 		DataInputStream in1 = new DataInputStream(sp1.getInputStream());
 		DataOutputStream out1 = new DataOutputStream(sp1.getOutputStream());
 		System.out.println("Player 1 connected. Waiting for Player 2..."); // System output muna! Not yet sure how to display this HAHA
+
 		Socket sp2 = ss.accept();
 		DataInputStream in2 = new DataInputStream(sp2.getInputStream());
 		DataOutputStream out2 = new DataOutputStream(sp2.getOutputStream());
@@ -45,14 +46,6 @@ public class GameServer {
 		GameStarter p2 = new GameStarter();
 		Thread t1 = new Thread(p1);
 		Thread t2 = new Thread(p2);
-
-		GameFrame runGame = new GameFrame(); // This should open up the frame after both
-
-		// This should start the client threads as soon as either player hits START.
-		if (runGame.getGameVisibility()) {
-			t1.start();
-			t2.start();
-		}
 
 		// End of prgram
         ss.close();

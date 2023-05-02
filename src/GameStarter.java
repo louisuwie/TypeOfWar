@@ -35,6 +35,8 @@ public class GameStarter implements Runnable {
 			try (Socket s = new Socket("localhost", 2000)) {
 				DataInputStream in = new DataInputStream(s.getInputStream());
 				DataOutputStream out = new DataOutputStream(s.getOutputStream());
+
+				GameFrame runGame = new GameFrame(); // If player is connected, Run the instance!
 			}
 		} catch (Exception e) {
 			System.out.print("Unable to connect to game.");
