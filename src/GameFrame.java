@@ -27,15 +27,18 @@ import java.awt.*;
 
 public class GameFrame {
 
-    boolean gameVisibility = false;
+    JFrame gameUI;
+    JLabel title;
+    JButton start;
+    GameCanvas gc;
 
     public GameFrame(){
 
         /* INITIALISING OF VARIABLES */
-        JFrame gameUI = new JFrame("Type of War");
-        JLabel title = new JLabel("Are you ready to Type for War?");
-        JButton start = new JButton("Start?");
-        GameCanvas gc = new GameCanvas();
+        gameUI = new JFrame("Type of War");
+        title = new JLabel("Are you ready to Type for War?");
+        start = new JButton("Start?");
+        gc = new GameCanvas();
 
         /* SPECIFIC DETAILING OF THE VARIABLES */
         gameUI.setSize(1920,1080);
@@ -46,28 +49,22 @@ public class GameFrame {
         gameUI.add(title);
         gameUI.add(start);
         gameUI.add(gc);
-        gc.addKeyBindings();
-        gc.setVisible(gameVisibility); // Hide the game stuff muna until the player STARTS
-
+        gc.setVisible(false); // Hide the game stuff muna until the player STARTS
+        
         /* SET VISIBLE */
         gameUI.setVisible(true);
         gameUI.setResizable(false);
-
+        
         /* FRAME FEATURES */
-
-        //if Start button is clicked, it makes the button invisible and the title invisible
+        
+        // if Start button is clicked, it makes the button and title invisible, then displays the GameCanvas.
         start.addActionListener(e -> {
             start.setVisible(false);
             title.setVisible(false);
-            gameVisibility = true;
-            gc.setVisible(gameVisibility);
+            gc.setVisible(true);
+            gc.addKeyBindings();
         });
-        }
-
-        /* ACCESSOR METHODS */
-        public boolean getGameVisibility() {
-            return gameVisibility;
-        }
+    }
 }
 
 

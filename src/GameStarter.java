@@ -24,18 +24,24 @@ GameStarter.java instantiates the game for the Player Side.
 import java.net.*;
 import java.io.*;
 import java.awt.event.*;
+import java.util.Scanner;
 import javax.swing.*;
 
 public class GameStarter implements Runnable {
 
-	Player p = new Player();
 	public static void main(String[] args) {
 		// Setting up the socket for the Player instance
+		Player p = new Player();
+		Scanner ai = new Scanner(System.in);
+
+		System.out.print("Enter the IP address: ");
+		String ip = ai.next();
+		ai.close();
+
 		try {
-			try (Socket s = new Socket("localhost", 2000)) {
+			try (Socket s = new Socket(ip, 2000)) {
 				DataInputStream in = new DataInputStream(s.getInputStream());
 				DataOutputStream out = new DataOutputStream(s.getOutputStream());
-
 				GameFrame runGame = new GameFrame(); // If player is connected, Run the instance!
 			}
 		} catch (Exception e) {
@@ -49,7 +55,7 @@ public class GameStarter implements Runnable {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				// There should be something that counts the clicks while the timer is running
-				p.resetSpeed(0); // Variable for number of clicks will replace the 0
+				// Variable for number of clicks will replace the 0
 			}
 		});
 		typeTimer.start();

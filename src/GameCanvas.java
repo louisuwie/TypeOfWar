@@ -37,7 +37,7 @@ public class GameCanvas extends JComponent{
     protected void paintComponent(Graphics g2d) {
 		// Just some tester graphics!
 		g2d.setColor(Color.PINK);
-        g2d.fillRect(100,100, 100, 100);
+        g2d.fillRect(500,500, 100, 100);
     }
 
 	public void addKeyBindings() {
@@ -48,7 +48,7 @@ public class GameCanvas extends JComponent{
 		AbstractAction sc = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				// Code to be executed when spacebar is pressed!
+				System.out.println("Keybindings work");
 			}
 		};
 
