@@ -27,10 +27,19 @@ import java.awt.event.*;
 
 public class GameCanvas extends JComponent{
 
+	ImageIcon background;
+	JLabel label;
+	JPanel jp = new JPanel();
+	GridLayout gl = new GridLayout(1, 2);
+
 	// Graphics-side code here, maybe import all the graphics-related files such as img, sound, gif, etc.
 	public GameCanvas() {
-		setPreferredSize(new Dimension(1000,1000)); // Numbers are placeholders!
+		setPreferredSize(new Dimension(1000, 600));
 		setFocusable(true);
+		background = new ImageIcon("ToW_Background.jpeg"); // Placeholder! Will fix the file path rin soon... 
+		label = new JLabel(background);
+		setLayout(new BorderLayout()); // Para easier for us to layout stuff in the future!
+		add(label, BorderLayout.CENTER);
 	}
 
 	@Override

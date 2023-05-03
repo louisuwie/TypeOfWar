@@ -27,6 +27,8 @@ import java.awt.event.*;
 import java.util.Scanner;
 import javax.swing.*;
 
+// TODO Figure out how to send each player's inputs to server, then send back inputs to canvases for validation and repainting.
+
 public class GameStarter implements Runnable {
 
 	public static void main(String[] args) {

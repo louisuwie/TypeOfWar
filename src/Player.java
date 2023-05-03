@@ -26,15 +26,20 @@ public class Player {
 
 	private int speed;
 	private int clicks;
+	private int low, med, high;
 
 	public Player() {
 		this.speed = 1;
 		this.clicks = 1;
+		/* Placeholder */
+		this.low = 1;
+		this.med = 1;
+		this.high = 1;
 	}
 
 	// Methods for mutating
 	public void resetSpeed(int clicks) {
-		speed = clicks * 3;
+		speed = clicks * 3; // Uwie will fix
 	}
 
 	// Some Accessor Methods

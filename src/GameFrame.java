@@ -41,7 +41,7 @@ public class GameFrame {
         gc = new GameCanvas();
 
         /* SPECIFIC DETAILING OF THE VARIABLES */
-        gameUI.setSize(1920,1080);
+        gameUI.setSize(1000,600);
         gameUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameUI.setLayout(new FlowLayout());
 
@@ -52,6 +52,7 @@ public class GameFrame {
         gc.setVisible(false); // Hide the game stuff muna until the player STARTS
         
         /* SET VISIBLE */
+        gameUI.setLocationRelativeTo(null);
         gameUI.setVisible(true);
         gameUI.setResizable(false);
         
