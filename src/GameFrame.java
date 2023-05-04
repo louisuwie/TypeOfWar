@@ -23,6 +23,7 @@ GameFrame.java handles all the features that happen within frame.
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 
 public class GameFrame {
@@ -65,6 +66,10 @@ public class GameFrame {
             gc.setVisible(true);
             gc.addKeyBindings();
         });
+    }
+
+    public GameCanvas getCanvas() {
+        return gc;
     }
 }
 

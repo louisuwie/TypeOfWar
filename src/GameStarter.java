@@ -31,38 +31,64 @@ import javax.swing.*;
 
 public class GameStarter implements Runnable {
 
+	static Socket s;
+	static DataInputStream in;
+	static DataOutputStream out;
+
+	GameFrame gf = new GameFrame();
+	Player p = new Player();
+
 	public static void main(String[] args) {
 		// Setting up the socket for the Player instance
-		Player p = new Player();
 		Scanner ai = new Scanner(System.in);
-
 		System.out.print("Enter the IP address: ");
 		String ip = ai.next();
 		ai.close();
 
 		try {
 			try (Socket s = new Socket(ip, 2000)) {
-				DataInputStream in = new DataInputStream(s.getInputStream());
-				DataOutputStream out = new DataOutputStream(s.getOutputStream());
-				GameFrame runGame = new GameFrame(); // If player is connected, Run the instance!
+				in = new DataInputStream(s.getInputStream());
+				out = new DataOutputStream(s.getOutputStream());
 			}
 		} catch (Exception e) {
 			System.out.print("Unable to connect to game.");
 		}
 	}
 
+	// So far, this run() method adds the KeyBindings and updates the Canvas painting every 1 second.
+	// It sends the clicks in the last second to the server.
+	// It will then read the ropeSpeed (rightPlayerSpeed - leftPlayerSpeed) that came from the server
+	// It will update the movement of the ToW assembly in GameCanvas (repaint is called every 1/10 of a second.)
 	@Override
 	public void run() {
-		Timer typeTimer = new Timer(1000, new ActionListener() {
-			@Override
+
+		GameCanvas gc = gf.getCanvas();
+		gc.addKeyBindings();
+		gc.updateGameCanvas();
+		
+		Timer timer = new Timer(1000, new ActionListener() {
+
+			int updatedClicks;
+			int playerSpeed;
+			int ropeSpeed;
+
 			public void actionPerformed(ActionEvent ae) {
-				// There should be something that counts the clicks while the timer is running
-				// Variable for number of clicks will replace the 0
+				gc.resetClicks();
+				updatedClicks = gc.getReferenceClicks();
+				playerSpeed = p.getSpeed(updatedClicks);
+
+				// For some reason. this is not working.. im not rally sure what to do...
+				try {
+					out.writeInt(playerSpeed); // Placeholder
+					ropeSpeed = in.readInt();
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				gc.changeDirection(ropeSpeed); // Also this..
+				System.out.println("Clicks: " + gc.getReferenceClicks());
 			}
 		});
-		typeTimer.start();
+		timer.setRepeats(true);
+		timer.start();
 	}
-
-	//TODO create a client code here, must be able to instantiate a client- for both player and client side
-
 }

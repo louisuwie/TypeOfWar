@@ -25,29 +25,30 @@
 public class Player {
 
 	private int speed;
-	private int clicks;
 	private int low, med, high;
 
 	public Player() {
 		this.speed = 1;
-		this.clicks = 1;
 		/* Placeholder */
-		this.low = 1;
-		this.med = 1;
-		this.high = 1;
+		this.low = 100;
+		this.med = 1000;
+		this.high = 2000;
 	}
 
 	// Methods for mutating
-	public void resetSpeed(int clicks) {
-		speed = clicks * 3; // Uwie will fix
-	}
 
 	// Some Accessor Methods
-	public int getSpeed() {
-		return speed;
-	}
+	public int getSpeed(int c) {
 
-	public int getClicks() {
-		return clicks;
+		// Placeholder values
+		if (c <= 1) {
+			speed = low;
+		} else if (c <= 10) {
+			speed = med;
+		} else if (c <100) {
+			speed = high;
+		}
+
+		return speed;
 	}
 }

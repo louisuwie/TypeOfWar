@@ -25,9 +25,11 @@ import java.io.*;
 import java.net.*;
 
 public class GameServer {
-    public static void main(String[] args) throws IOException {
-        
-		// Add server code here, must be able to instantiate a server- for both player and client side
+
+	public GameServer() {
+	
+		try {
+			// Add server code here, must be able to instantiate a server- for both player and client side
 		ServerSocket ss = new ServerSocket(2000); // Not too sure about the port number!
 		
 		// Initializing Input and Output streams for the two Player sockets
@@ -42,13 +44,29 @@ public class GameServer {
 		System.out.println("Player 2 connected. Launching game.");
 
 		// Casting into threads
+		// I FEEL LIKE THIS IS NOT THE WAY TO DO THIS HELPP
 		GameStarter p1 = new GameStarter();
 		GameStarter p2 = new GameStarter();
 		Thread t1 = new Thread(p1);
 		Thread t2 = new Thread(p2);
+		t1.start();
+		t2.start();
 
-		// End of prgram
-        ss.close();
+		int p1s = in1.readInt();
+		System.out.println(p1s);
+		int p2s = in2.readInt();
+		System.out.println(p2s);
+		int ropeSpeed = p2s - p1s;
 
+		out1.writeInt(ropeSpeed);
+		out2.writeInt(ropeSpeed);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
+
+	public static void main(String[] args) throws IOException {
+		GameServer gs = new GameServer();
+	}
+
 }

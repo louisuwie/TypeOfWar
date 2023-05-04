@@ -31,6 +31,7 @@ public class GameCanvas extends JComponent{
 	JLabel label;
 	JPanel jp = new JPanel();
 	GridLayout gl = new GridLayout(1, 2);
+	int clicks, clickReference, direction;
 
 	// Graphics-side code here, maybe import all the graphics-related files such as img, sound, gif, etc.
 	public GameCanvas() {
@@ -40,13 +41,13 @@ public class GameCanvas extends JComponent{
 		label = new JLabel(background);
 		setLayout(new BorderLayout()); // Para easier for us to layout stuff in the future!
 		add(label, BorderLayout.CENTER);
+		clicks = 1; // Starting speed
+		clickReference = 0;
 	}
 
 	@Override
     protected void paintComponent(Graphics g2d) {
-		// Just some tester graphics!
-		g2d.setColor(Color.PINK);
-        g2d.fillRect(500,500, 100, 100);
+		// TODO code for painting the Tug-of-War assembly
     }
 
 	public void addKeyBindings() {
@@ -57,7 +58,7 @@ public class GameCanvas extends JComponent{
 		AbstractAction sc = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				System.out.println("Keybindings work");
+				clicks++;
 			}
 		};
 
@@ -65,4 +66,32 @@ public class GameCanvas extends JComponent{
 		am.put("Spacebar Press", sc);
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "Spacebar Press");
 	}
+
+	public void resetClicks() {
+		clickReference = clicks; // So that the program can get the clicks in the last second
+		clicks = 0; // Resets clicks for the next second
+    }
+
+	public int getReferenceClicks() {
+		return clickReference;
+	}
+
+	public void changeDirection(int d) {
+		direction = d; 
+	}
+
+	public int getDirection() {
+		return direction;
+	}
+
+	public void updateGameCanvas() {
+		Timer ugcTimer = new Timer(100, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				repaint();
+			}
+		});
+		ugcTimer.setRepeats(true);
+		ugcTimer.start();
+	} 
 }
