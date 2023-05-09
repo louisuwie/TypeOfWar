@@ -29,20 +29,22 @@ public class GameCanvas extends JComponent{
 
 	ImageIcon background;
 	JLabel label;
-	JPanel jp = new JPanel();
-	GridLayout gl = new GridLayout(1, 2);
 	int clicks, clickReference, direction;
 
 	// Graphics-side code here, maybe import all the graphics-related files such as img, sound, gif, etc.
 	public GameCanvas() {
-		setPreferredSize(new Dimension(1000, 600));
-		setFocusable(true);
-		background = new ImageIcon("ToW_Background.jpeg"); // Placeholder! Will fix the file path rin soon... 
-		label = new JLabel(background);
-		setLayout(new BorderLayout()); // Para easier for us to layout stuff in the future!
-		add(label, BorderLayout.CENTER);
+
 		clicks = 1; // Starting speed
 		clickReference = 0;
+
+		background = new ImageIcon("ToW_Background.jpeg"); // Placeholder! Will fix the file path rin soon...
+		label = new JLabel(background);
+
+		setPreferredSize(new Dimension(1000, 600));
+		setFocusable(true);
+		setLayout(new BorderLayout()); // Para easier for us to layout stuff in the future!
+		add(label, BorderLayout.CENTER);
+
 	}
 
 	@Override
@@ -55,7 +57,7 @@ public class GameCanvas extends JComponent{
 		InputMap im = getInputMap();
 
 		// Define the Abstract Actions
-		AbstractAction sc = new AbstractAction() {
+		AbstractAction spacebarClicks = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				clicks++;
@@ -63,7 +65,7 @@ public class GameCanvas extends JComponent{
 		};
 
 		// Creating the Action
-		am.put("Spacebar Press", sc);
+		am.put("Spacebar Press", spacebarClicks);
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "Spacebar Press");
 	}
 

@@ -35,7 +35,7 @@ public class GameStarter implements Runnable {
 	static DataInputStream in;
 	static DataOutputStream out;
 
-	GameFrame gf = new GameFrame();
+	GameFrame gameFrame = new GameFrame();
 	Player p = new Player();
 
 	public static void main(String[] args) {
@@ -62,9 +62,9 @@ public class GameStarter implements Runnable {
 	@Override
 	public void run() {
 
-		GameCanvas gc = gf.getCanvas();
-		gc.addKeyBindings();
-		gc.updateGameCanvas();
+		GameCanvas gameCanvas = gameFrame.getCanvas();
+		gameCanvas.addKeyBindings();
+		gameCanvas.updateGameCanvas();
 		
 		Timer timer = new Timer(1000, new ActionListener() {
 
@@ -73,19 +73,19 @@ public class GameStarter implements Runnable {
 			int ropeSpeed;
 
 			public void actionPerformed(ActionEvent ae) {
-				gc.resetClicks();
-				updatedClicks = gc.getReferenceClicks();
+				gameCanvas.resetClicks();
+				updatedClicks = gameCanvas.getReferenceClicks();
 				playerSpeed = p.getSpeed(updatedClicks);
 
-				// For some reason. this is not working.. im not rally sure what to do...
+				// For some reason. this is not working... im not rally sure what to do...
 				try {
 					out.writeInt(playerSpeed); // Placeholder
 					ropeSpeed = in.readInt();
 				} catch (Exception e) {
-					// TODO: handle exception
+					throw new RuntimeException(e);
 				}
-				gc.changeDirection(ropeSpeed); // Also this..
-				System.out.println("Clicks: " + gc.getReferenceClicks());
+				gameCanvas.changeDirection(ropeSpeed); // Also this..
+				System.out.println("Clicks: " + gameCanvas.getReferenceClicks());
 			}
 		});
 		timer.setRepeats(true);

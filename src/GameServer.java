@@ -29,14 +29,15 @@ public class GameServer {
 	public GameServer() {
 	
 		try {
-			// Add server code here, must be able to instantiate a server- for both player and client side
-		ServerSocket ss = new ServerSocket(2000); // Not too sure about the port number!
-		
+		ServerSocket ss = new ServerSocket(2000);
+		System.out.println("Server started. Waiting for Player 1...");
+
 		// Initializing Input and Output streams for the two Player sockets
 		Socket sp1 = ss.accept();
 		DataInputStream in1 = new DataInputStream(sp1.getInputStream());
 		DataOutputStream out1 = new DataOutputStream(sp1.getOutputStream());
-		System.out.println("Player 1 connected. Waiting for Player 2..."); // System output muna! Not yet sure how to display this HAHA
+		System.out.println("Player 1 connected. Waiting for Player 2...");
+
 
 		Socket sp2 = ss.accept();
 		DataInputStream in2 = new DataInputStream(sp2.getInputStream());
@@ -44,7 +45,6 @@ public class GameServer {
 		System.out.println("Player 2 connected. Launching game.");
 
 		// Casting into threads
-		// I FEEL LIKE THIS IS NOT THE WAY TO DO THIS HELPP
 		GameStarter p1 = new GameStarter();
 		GameStarter p2 = new GameStarter();
 		Thread t1 = new Thread(p1);
@@ -63,10 +63,12 @@ public class GameServer {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+
+
 	}
 
-	public static void main(String[] args) throws IOException {
-		GameServer gs = new GameServer();
+	public static void main(String[] args) {
+		GameServer gameServer = new GameServer();
 	}
 
 }
