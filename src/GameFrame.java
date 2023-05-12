@@ -62,7 +62,8 @@ public class GameFrame {
         @Override
         public void run() {
             try {
-                
+                // Add a while loop that continuously receives the rope speed
+                // Add to an ArrayList
             } catch (Exception e) {
                 // TODO: handle exception
             }
@@ -81,7 +82,7 @@ public class GameFrame {
         @Override
         public void run() {
             try {
-                
+                // TODO Add a while loop that continuously sends out clicks to GameServer
             } catch (Exception e) {
                 // TODO: handle exception
             }
