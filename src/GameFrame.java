@@ -65,6 +65,7 @@ public class GameFrame {
             title.setVisible(false);
             gc.setVisible(true);
             gc.addKeyBindings();
+
         });
     }
 

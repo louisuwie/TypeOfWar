@@ -33,13 +33,13 @@ public class GameServer {
 		System.out.println("Server started. Waiting for Player 1...");
 
 		// Initializing Input and Output streams for the two Player sockets
-		Socket sp1 = ss.accept();
+		Socket sp1 = ss.accept(); //Player 1
 		DataInputStream in1 = new DataInputStream(sp1.getInputStream());
 		DataOutputStream out1 = new DataOutputStream(sp1.getOutputStream());
 		System.out.println("Player 1 connected. Waiting for Player 2...");
 
 
-		Socket sp2 = ss.accept();
+		Socket sp2 = ss.accept(); //Player 2
 		DataInputStream in2 = new DataInputStream(sp2.getInputStream());
 		DataOutputStream out2 = new DataOutputStream(sp2.getOutputStream());
 		System.out.println("Player 2 connected. Launching game.");
@@ -49,13 +49,17 @@ public class GameServer {
 		GameStarter p2 = new GameStarter();
 		Thread t1 = new Thread(p1);
 		Thread t2 = new Thread(p2);
+
+		//Starts the threads
 		t1.start();
 		t2.start();
 
 		int p1s = in1.readInt();
 		System.out.println(p1s);
+
 		int p2s = in2.readInt();
 		System.out.println(p2s);
+
 		int ropeSpeed = p2s - p1s;
 
 		out1.writeInt(ropeSpeed);

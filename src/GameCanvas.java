@@ -25,7 +25,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class GameCanvas extends JComponent{
+public class GameCanvas extends JComponent {
 
 	ImageIcon background;
 	JLabel label;
@@ -48,52 +48,58 @@ public class GameCanvas extends JComponent{
 	}
 
 	@Override
-    protected void paintComponent(Graphics g2d) {
-		// TODO code for painting the Tug-of-War assembly
-    }
+	protected void paintComponent(Graphics g2d) {
+
+		//import image
+		ImageIcon image = new ImageIcon("ToW_Assembly.png");
+
+		//draw image with x value taken from a different variable, in this case, clicks
+		g2d.drawImage(image.getImage(), Player.getSpeed(), 200, null);
+	}
 
 	public void addKeyBindings() {
 		ActionMap am = getActionMap();
 		InputMap im = getInputMap();
 
 		// Define the Abstract Actions
-		AbstractAction spacebarClicks = new AbstractAction() {
+		AbstractAction spaceClicks = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				clicks++;
+				updateGameCanvas();
+				System.out.println("Speed is: " + Player.getSpeed());
+				System.out.println("Clicks from player: " + Player.getPlayerNumber());
 			}
 		};
 
 		// Creating the Action
-		am.put("Spacebar Press", spacebarClicks);
+		am.put("Spacebar Press", spaceClicks);
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "Spacebar Press");
 	}
 
 	public void resetClicks() {
 		clickReference = clicks; // So that the program can get the clicks in the last second
 		clicks = 0; // Resets clicks for the next second
-    }
+	}
+
+	public void tuggingDirection() {
+		// TODO code for tugging the assembly
+
+
+	}
+
+	public void changeDirection(int d) {
+		direction = d;
+	}
+
+
+	public void updateGameCanvas() {
+		Timer ugcTimer = new Timer(100, ae -> repaint());
+		ugcTimer.setRepeats(true);
+		ugcTimer.start();
+	}
 
 	public int getReferenceClicks() {
 		return clickReference;
 	}
-
-	public void changeDirection(int d) {
-		direction = d; 
-	}
-
-	public int getDirection() {
-		return direction;
-	}
-
-	public void updateGameCanvas() {
-		Timer ugcTimer = new Timer(100, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				repaint();
-			}
-		});
-		ugcTimer.setRepeats(true);
-		ugcTimer.start();
-	} 
 }

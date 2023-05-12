@@ -24,31 +24,52 @@
 
 public class Player {
 
-	private int speed;
-	private int low, med, high;
+	private static int playerNumber = 0;
+	private static int speed;
+	private static int low;
+	private static int med;
+	private static int high;
 
-	public Player() {
-		this.speed = 1;
-		/* Placeholder */
-		this.low = 100;
-		this.med = 1000;
-		this.high = 2000;
+	public Player(int a) {
+		playerNumber = a;
+		speed = 1;
+		low = 25;
+		med = 50;
+		high = 75;
 	}
 
 	// Methods for mutating
 
 	// Some Accessor Methods
-	public int getSpeed(int c) {
+	public static void Speed(int c) {
 
 		// Placeholder values
-		if (c <= 1) {
-			speed = low;
-		} else if (c <= 10) {
-			speed = med;
-		} else if (c <100) {
-			speed = high;
+		if(playerNumber == 0){
+			if (c <= 2) {
+				speed = low * -1;
+			} else if (c <= 8) {
+				speed = med * -1 ;
+			} else if (c < 12) {
+				speed = high * -1;
+			}
 		}
+		else if(playerNumber == 1){
+			if (c <= 2) {
+				speed = low;
+			} else if (c <= 8) {
+				speed = med;
+			} else if (c <12) {
+				speed = high;
+			}
 
+		}
+	}
+
+	public static int getSpeed(){
 		return speed;
+	}
+
+	public static int getPlayerNumber() {
+		return playerNumber;
 	}
 }

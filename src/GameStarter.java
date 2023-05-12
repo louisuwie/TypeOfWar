@@ -34,11 +34,15 @@ public class GameStarter implements Runnable {
 	static Socket s;
 	static DataInputStream in;
 	static DataOutputStream out;
+	static Player p;
 
 	GameFrame gameFrame = new GameFrame();
-	Player p = new Player();
 
 	public static void main(String[] args) {
+
+		for (int x = 0; x < 2; x++) {
+			Player p = new Player(x);
+		}
 		// Setting up the socket for the Player instance
 		Scanner ai = new Scanner(System.in);
 		System.out.print("Enter the IP address: ");
@@ -46,10 +50,9 @@ public class GameStarter implements Runnable {
 		ai.close();
 
 		try {
-			try (Socket s = new Socket(ip, 2000)) {
-				in = new DataInputStream(s.getInputStream());
-				out = new DataOutputStream(s.getOutputStream());
-			}
+			s = new Socket(ip, 2000);
+			in = new DataInputStream(s.getInputStream());
+			out = new DataOutputStream(s.getOutputStream());
 		} catch (Exception e) {
 			System.out.print("Unable to connect to game.");
 		}
@@ -69,22 +72,30 @@ public class GameStarter implements Runnable {
 		Timer timer = new Timer(1000, new ActionListener() {
 
 			int updatedClicks;
-			int playerSpeed;
+			static int playerSpeed;
 			int ropeSpeed;
 
 			public void actionPerformed(ActionEvent ae) {
+				gameCanvas.updateGameCanvas();
 				gameCanvas.resetClicks();
 				updatedClicks = gameCanvas.getReferenceClicks();
-				playerSpeed = p.getSpeed(updatedClicks);
+				Player.Speed(updatedClicks);
 
-				// For some reason. this is not working... im not rally sure what to do...
+				// Send the player's speed to the server and read the rope speed in response
 				try {
-					out.writeInt(playerSpeed); // Placeholder
-					ropeSpeed = in.readInt();
-				} catch (Exception e) {
-					throw new RuntimeException(e);
+					if (out != null) {
+						out.writeInt(playerSpeed);
+						out.flush();
+						ropeSpeed = in.readInt();
+					} else {
+						System.out.println("Error: out is null");
+					}
+				} catch (IOException e) {
+					System.out.println("Error sending or receiving data: " + e);
 				}
-				gameCanvas.changeDirection(ropeSpeed); // Also this..
+
+				// Update the game canvas with the new rope speed
+				gameCanvas.changeDirection(ropeSpeed);
 				System.out.println("Clicks: " + gameCanvas.getReferenceClicks());
 			}
 		});
