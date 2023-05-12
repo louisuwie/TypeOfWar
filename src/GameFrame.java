@@ -1,76 +1,91 @@
-/**
- @author Louis G. Binwag III (200747) & Maria Charmane Rose E. Naciongayo (214152)
- @version April 25, 2023
- **/
-
-/*
-	I have not discussed the Java language code in my program
-	with anyone other than my instructor or the teaching assistants
-	assigned to this course.
-
-	I have not used Java language code obtained from another student,
-	or any other unauthorized source, either modified or unmodified.
-
-	If any Java language code or documentation used in my program
-	was obtained from another source, such as a textbook or website,
-	that has been clearly noted with a proper citation in the comments
-	of my program.
-*/
-
-/*
-    GameFrame.java handles all the features that happen within frame.
-*/
-
-
-import javax.swing.*;
-import java.awt.*;
-
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
-
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import java.io.*;
+import java.net.*;
 
 public class GameFrame {
+    
+    JFrame jf;
+    JButton jb;
+    JLabel jl;
+    Socket s;
+    int playerID;
+    GameCanvas gc;
+    ReadFromServer rfsRunnable;
+    WriteToServer wtsRunnable;
 
-    boolean gameVisibility = false;
-
-    public GameFrame(){
-
-        /* INITIALISING OF VARIABLES */
-        JFrame gameUI = new JFrame("Type of War"); // Move to Client program
-        JLabel title = new JLabel("Are you ready to Type for War?");
-        JButton start = new JButton("Start?");
-        GameCanvas gc = new GameCanvas();
-
-        /* SPECIFIC DETAILING OF THE VARIABLES */
-        gameUI.setSize(1920,1080);
-        gameUI.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        gameUI.setLayout(new FlowLayout());
-
-        /* ADDING FEATURES INTO FRAME */
-        gameUI.add(title);
-        gameUI.add(start);
-        gameUI.add(gc);
+    public GameFrame() {
+        this.jf = new JFrame();
+        this.gc = new GameCanvas(); 
         gc.addKeyBindings();
-        gc.setVisible(gameVisibility); // Hide the game stuff muna until the player STARTS
+        jf.add(gc);
+        this.jb = new JButton();
+        this.jl = new JLabel();
+        this.playerID = 0;
+    }
 
-        /* SET VISIBLE */
-        gameUI.setVisible(true);
-        gameUI.setResizable(false);
+    public void setUpGameFrame() {
+        jf.setTitle("Type of War | Player #" + playerID);
+        jf.setSize(500, 500);
+        jb.setText("Start");
+        jl.setText("Are you ready?");
+        jf.setLocationRelativeTo(null);
+        jf.setVisible(true);
+        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
 
-        /* FRAME FEATURES */
+    public void connectToServer(String ip) {
+        try {
+            s = new Socket(ip, 2000);
+            DataOutputStream out = new DataOutputStream(s.getOutputStream());
+            DataInputStream in = new DataInputStream(s.getInputStream());
+            System.out.println("Connected to server " + ip);
+            playerID = in.readInt();
+            System.out.println("You are Player #" + playerID + ".");
+            rfsRunnable = new ReadFromServer(in);
+            wtsRunnable = new WriteToServer(out);
+            if (playerID == 1) System.out.print("Waiting for Player #2 to connect."); // for Player 1 only
+        } catch (Exception e) {
+            System.out.println("Unable to connect to server.");
+        }
+    }
 
-        //if Start button is clicked, it makes the button invisible and the title invisible
-        start.addActionListener(e -> {
-            start.setVisible(false);
-            title.setVisible(false);
-            gameVisibility = true;
-            gc.setVisible(gameVisibility);
-        });
+    private class ReadFromServer implements Runnable {
+        private DataInputStream in;
+
+        private ReadFromServer(DataInputStream d) {
+            in = d;
+            System.out.println("RFS Runnable created");
         }
 
-        /* ACCESSOR METHODS */
-        public boolean getGameVisibility() {
-            return gameVisibility;
+        @Override
+        public void run() {
+            try {
+                
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
         }
+
+    }
+
+    private class WriteToServer implements Runnable {
+        private DataOutputStream out;
+
+        private WriteToServer(DataOutputStream d) {
+            out = d;
+            System.out.println("WTS Runnable created");
+        }
+
+        @Override
+        public void run() {
+            try {
+                
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+        }
+
+    }
 }
-
-
