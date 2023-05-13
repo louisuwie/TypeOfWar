@@ -21,19 +21,8 @@
     GameCanvas.java handles the graphics-side of the program.
 */
 
-import java.util.Scanner;
+public class TypeRacer {
 
-public class GameStarter {
+ //TODO SET UP GUI TO ACCEPT TYPING AND SEND BONUS BUFF TO ROPE ASSEMBLY.
 
-    public static void main(String args[]) {
-        Scanner in = new Scanner(System.in);
-        System.out.print("IP Address: ");
-        String ip = in.next();
-        GameFrame gf = new GameFrame();
-        gf.connectToServer(ip);
-        gf.setUpGameFrame();
-        gf.setUpFrameTimers();
-        in.close();
-    }
-    
 }
