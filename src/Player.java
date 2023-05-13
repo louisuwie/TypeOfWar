@@ -7,9 +7,9 @@ public class Player {
     public Player(int id) {
         this.playerID = id;
         this.speed = 1;
-        this.low = 1;
-        this.med = 2;
-        this.high = 3;
+        this.low = 6;
+        this.med = 8;
+        this.high = 10;
     }
 
     public void calculateSpeed(int clicks) {

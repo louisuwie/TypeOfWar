@@ -32,15 +32,16 @@ public class GameFrame {
 
     public GameFrame() {
         this.jf = new JFrame();
-
         this.bg = new StartScreen();
-        bg.setLayout(new GridBagLayout());
+
+        bg.setLayout(new GridLayout(3,1));
 
         this.gc = new GameCanvas();
 
         this.jb = new JButton("Start");
-        jb.addActionListener(new ActionListener() {
+        
 
+        jb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 jb.setVisible(false);
@@ -52,9 +53,12 @@ public class GameFrame {
             }
             
         });
+
+        jb.setBounds(440, 240, 80, 30);
         bg.add(jb);
         jf.add(bg);
-        
+        jf.add(jb);
+
         this.playerID = 0;
         this.player = null;
         this.ropeSpeed = 0;
@@ -107,8 +111,8 @@ public class GameFrame {
         public void run() {
             try {
                 while (true) {
-
                     if (player != null) ropeSpeed = in.readInt();
+                    System.out.println("Rope Speed: " + ropeSpeed); //DEBUG
                 }
             } catch (IOException e) {
                 System.out.println("RFS Run failed.");
@@ -140,11 +144,12 @@ public class GameFrame {
                     if (player != null) {
                         int clicks = gc.getClicks();
                         player.calculateSpeed(clicks);
+
                         out.writeInt(player.getSpeed());
                         out.flush();
                     }
                     try {
-                        Thread.sleep(10);
+                        Thread.sleep(25);
                     } catch (InterruptedException e) {
                         System.out.println("Thread interrupted");
                     }

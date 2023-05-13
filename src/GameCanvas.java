@@ -24,6 +24,7 @@ public class GameCanvas extends JComponent {
 		Graphics2D g2d = (Graphics2D) g; // Cast into a g2d Object
 
 		g2d.drawImage(bg, 0, 0, 960, 540, null);
+		g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
 		ra.draw(g2d);
 	}
 
@@ -43,7 +44,7 @@ public class GameCanvas extends JComponent {
 
 
 	public void startClickTimer() {
-		Timer clickTimer = new Timer(1000, new ActionListener() {
+		Timer clickTimer = new Timer(2000, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				clicks = 0;

@@ -40,6 +40,7 @@ public class GameServer {
                 System.out.println("Player #" + numPlayers + " has connected.");
                 ReadFromClient rfc = new ReadFromClient(numPlayers, in);
                 WriteToClient wtc = new WriteToClient(numPlayers, out);
+
                 if (numPlayers == 1) {
                     s1 = s;
                     p1ReadRunnable = rfc;
@@ -116,7 +117,7 @@ public class GameServer {
                     out.writeInt(ropeSpeed);
                     out.flush();
                     try {
-                        Thread.sleep(10);
+                        Thread.sleep(25);
                     } catch (InterruptedException e) {
                         System.out.println("Thread interrupted");
                     }
