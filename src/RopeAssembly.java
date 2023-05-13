@@ -24,7 +24,12 @@ public class RopeAssembly {
         current = gr;
     }
 
+    public void setX(int a) {
+        this.x = a;
+    }
+
     public void draw(Graphics2D g2d) {
-        g2d.drawImage(gr, 50, 50, null);
+        g2d.drawImage(gr, x, 50, null);
+
     }
 }
