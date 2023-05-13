@@ -54,6 +54,20 @@ public class GameServer {
                     s2 = s;
                     p2ReadRunnable = rfc;
                     p2WriteRunnable = wtc;
+
+                    // At this point, there are 2 players connected already.
+                    p1WriteRunnable.sendStartMessage();
+                    p2WriteRunnable.sendStartMessage();
+
+                    // Start the threads
+                    Thread read1 = new Thread(p1ReadRunnable);
+                    Thread read2 = new Thread(p2ReadRunnable);
+                    read1.start();
+                    read2.start();
+                    Thread write1 = new Thread(p1WriteRunnable);
+                    Thread write2 = new Thread(p2WriteRunnable);
+                    write1.start();
+                    write2.start();
                 }
             }
             System.out.println("No longer accepting players.");
@@ -77,18 +91,17 @@ public class GameServer {
         // This run() method continuously reads the clicks sent from GameCanvas and assigns it to speed variables foe ach of the players.
         @Override
         public void run() {
-            while (true) {
-                try {
-                    speed = in.readInt();
+
+            try {
+                while (true) {
                     if (playerID == 1) {
-                        p1Speed = speed;
+                        p1Speed = in.readInt();
                     } else if (playerID == 2) {
-                        p2Speed = speed;
+                        p2Speed = in.readInt();
                     }
-                    System.out.println("This code is reachable 3.");
-                } catch (IOException e) {
-                    System.out.println("RFC run() failed.");
                 }
+            } catch (Exception e) {
+                System.out.println("RFC run() failed.");
             }
         }
     }
@@ -109,10 +122,22 @@ public class GameServer {
                 while (true) {
                     out.writeInt(ropeSpeed);
                     out.flush();
-                    System.out.println("This code is reachable 4.");
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        System.out.println("Thread interrupted");
+                    }
                 }
             } catch (Exception e) {
                 System.out.println("WTC Run failed.");
+            }
+        }
+
+        public void sendStartMessage() {
+            try {
+               out.writeUTF("We now have 2 players."); 
+            } catch (IOException e) {
+                System.out.println("IO Exception from sendStartMessage");
             }
         }
     }
@@ -131,24 +156,11 @@ public class GameServer {
     }
 
     // Method for starting threads
-    public void startThreads() {
-        // TODO Put code that sir says at the end of his video
-        Thread p1rrThread = new Thread(p1ReadRunnable);
-        Thread p2rrThread = new Thread(p2ReadRunnable);
-        Thread p1wrThread = new Thread(p1WriteRunnable);
-        Thread p2wrThread = new Thread(p2WriteRunnable);
-
-        p1rrThread.start();
-        p2rrThread.start();
-        p1wrThread.start();
-        p2wrThread.start();
-    }
 
     public static void main(String args[]) {
         GameServer gs = new GameServer();
         gs.acceptConnections();
         gs.startServerTimer();
-        gs.startThreads();
     }
 
 }

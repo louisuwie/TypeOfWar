@@ -15,8 +15,6 @@ public class GameCanvas extends JComponent {
 		velocity = 0;
 		ra = new RopeAssembly();
 		bg = new ImageIcon("DesignAssets/Background.png").getImage();
-
-		// ra.isStartScreen(true);
     }
 
 

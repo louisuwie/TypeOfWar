@@ -4,7 +4,12 @@ import java.awt.*;
 
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
+
+// TODO Implement ArrayLists to keep track of the speeds to avoid lag
+// TODO Make the Start JButton show both GameCanvases
+// TODO Center the RopeAssembly image; Scale them properly because they are a little warped
+// TODO Add something to the middle for collision / Implement something that will end the game
+// TODO Interval Word Input
 
 public class GameFrame {
     
@@ -13,6 +18,7 @@ public class GameFrame {
     JLabel jl;
     Socket s;
     GameCanvas gc;
+    StartScreen startScreen;
     
     ReadFromServer rfsRunnable;
     WriteToServer wtsRunnable;
@@ -20,32 +26,43 @@ public class GameFrame {
     int playerID;
     Player player;
 
-    ArrayList<Integer> ropeSpeeds;
     int ropeSpeed;
+
+    JPanel bg;
 
     public GameFrame() {
         this.jf = new JFrame();
 
-        this.gc = new GameCanvas(); 
-        gc.addKeyBindings();
-        gc.startClickTimer();
-        gc.startRepaintTimer();
-        jf.add(gc);
+        this.bg = new StartScreen();
+        bg.setLayout(new GridBagLayout());
 
-        this.jb = new JButton();
-        this.jl = new JLabel();
+        this.gc = new GameCanvas();
+
+        this.jb = new JButton("Start");
+        jb.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jb.setVisible(false);
+                bg.setVisible(false);
+                gc.addKeyBindings();
+                gc.startClickTimer();
+                gc.startRepaintTimer();
+                jf.add(gc);
+            }
+            
+        });
+        bg.add(jb);
+        jf.add(bg);
+        
         this.playerID = 0;
         this.player = null;
-        this.ropeSpeeds = new ArrayList<>();
-        
         this.ropeSpeed = 0;
     }
 
     public void setUpGameFrame() {
         jf.setTitle("Type of War | Player #" + playerID);
         jf.setSize(960, 540);
-        jb.setText("Start");
-        jl.setText("Are you ready?");
         jf.setLocationRelativeTo(null);
         jf.setVisible(true);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,6 +81,14 @@ public class GameFrame {
             player = new Player(playerID);
             rfsRunnable = new ReadFromServer(in);
             wtsRunnable = new WriteToServer(out);
+            rfsRunnable.waitForStartMessage();
+
+            Thread read = new Thread(rfsRunnable);
+            Thread write = new Thread(wtsRunnable);
+
+            read.start();
+            write.start();
+
             if (playerID == 1) System.out.print("Waiting for Player #2 to connect."); // for Player 1 only
         } catch (Exception e) {
             System.out.println("Unable to connect to server.");
@@ -82,12 +107,21 @@ public class GameFrame {
         public void run() {
             try {
                 while (true) {
-                    ropeSpeed = in.readInt();
-                    System.out.println("The current speed is " + ropeSpeed);
+
+                    if (player != null) ropeSpeed = in.readInt();
                 }
-            } catch (Exception e) {
+            } catch (IOException e) {
                 System.out.println("RFS Run failed.");
             }
+        }
+
+        public void waitForStartMessage() {
+             try {
+                String startMsg = in.readUTF();
+                System.out.println("Message from server: " + startMsg); 
+             } catch (IOException e) {
+                System.out.println("IO Exception from waitForStartMessage");
+             }
         }
     }
 
@@ -103,12 +137,17 @@ public class GameFrame {
         public void run() {
             try {
                 while (true) {
-                    int clicks = gc.getClicks();
-                    player.calculateSpeed(clicks);
-                    out.writeInt(player.getSpeed());
-                    out.flush();
-                    System.out.println("Clicks: " + clicks);
-                    System.out.println("Player Speed: " + player.getSpeed());
+                    if (player != null) {
+                        int clicks = gc.getClicks();
+                        player.calculateSpeed(clicks);
+                        out.writeInt(player.getSpeed());
+                        out.flush();
+                    }
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        System.out.println("Thread interrupted");
+                    }
                 }
             } catch (Exception e) {
                 System.out.println("WTS Runnable failed.");
@@ -128,12 +167,5 @@ public class GameFrame {
         });
         timer.setRepeats(true);
         timer.start();
-    }
-
-    public void startThreads() {
-        Thread rr = new Thread(rfsRunnable);
-        Thread wr = new Thread(wtsRunnable);
-        rr.start();
-        wr.start();
     }
 }

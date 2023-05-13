@@ -1,6 +1,7 @@
 import java.util.Scanner;
 
 public class GameStarter {
+
     public static void main(String args[]) {
         Scanner in = new Scanner(System.in);
         System.out.print("IP Address: ");
@@ -9,7 +10,7 @@ public class GameStarter {
         gf.connectToServer(ip);
         gf.setUpGameFrame();
         gf.setUpFrameTimers();
-        gf.startThreads();
         in.close();
     }
+    
 }
