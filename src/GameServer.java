@@ -1,71 +1,154 @@
-/**
- @author Louis G. Binwag III (200747) & Maria Charmane Rose E. Naciongayo (214152)
- @version April 25, 2023
- **/
-
-/*
-	I have not discussed the Java language code in my program
-	with anyone other than my instructor or the teaching assistants
-	assigned to this course.
-
-	I have not used Java language code obtained from another student,
-	or any other unauthorized source, either modified or unmodified.
-
-	If any Java language code or documentation used in my program
-	was obtained from another source, such as a textbook or website,
-	that has been clearly noted with a proper citation in the comments
-	of my program.
-*/
-
-/*
-    GameServer.java instantiates the server and starts the game. This instantiates for the Hosts' side.
-*/
-
-/* LAUNCH TERMINAL AT PEM FOLDER
- * TYPE chmod 400 TestKey001.pem
- * ssh -i "TestKey001.pem" ec2-user@ec2-54-208-43-191.compute-1.amazonaws.com
- * install Git
- * git clone https://github.com/louisuwie/TypeOfWar.git
- * install then run Java
- * Compile game files
- * Run1!!!! YAYYY
-*/
-
 import java.io.*;
 import java.net.*;
+import java.util.*;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.Timer;
 
 public class GameServer {
-    public static void main(String[] args) throws IOException {
-        
-		// Add server code here, must be able to instantiate a server- for both player and client side
-		ServerSocket ss = new ServerSocket(2000); // Not too sure about the port number!
-		
-		// Initializing Input and Output streams for the two Player sockets
-		Socket sp1 = ss.accept();
-		DataInputStream in1 = new DataInputStream(sp1.getInputStream());
-		DataOutputStream out1 = new DataOutputStream(sp1.getOutputStream());
-		System.out.println("Player 1 connected. Waiting for Player 2..."); // System output muna! Not yet sure how to display this HAHA
-		Socket sp2 = ss.accept();
-		DataInputStream in2 = new DataInputStream(sp2.getInputStream());
-		DataOutputStream out2 = new DataOutputStream(sp2.getOutputStream());
-		System.out.println("Player 2 connected. Launching game.");
 
-		// Casting into threads
-		GameStarter p1 = new GameStarter();
-		GameStarter p2 = new GameStarter();
-		Thread t1 = new Thread(p1);
-		Thread t2 = new Thread(p2);
+    ServerSocket ss;
+    Socket s1, s2;
+    int maxPlayers, numPlayers;
 
-		GameFrame runGame = new GameFrame(); // This should open up the frame after both
+    private ReadFromClient p1ReadRunnable, p2ReadRunnable;
+    private WriteToClient p1WriteRunnable, p2WriteRunnable;
 
-		// This should start the client threads as soon as either player hits START.
-		if (runGame.getGameVisibility()) {
-			t1.start();
-			t2.start();
-		}
+    private int p1Speed, p2Speed;
+    private int ropeSpeed;
 
-		// End of prgram
-        ss.close();
+    private ArrayList<Integer> p1InitialSpeeds, p2InitialSpeeds;
+    private ArrayList<Integer> ropeSpeeds;
 
-	}
+
+    public GameServer() {
+
+        numPlayers = 0;
+        maxPlayers = 2;
+
+        try {
+            ss = new ServerSocket(2000);
+            System.out.println("Initialized server.");
+        } catch (Exception e) {
+            System.out.println("Failed to initialize server.");
+        }
+    }
+
+    public void acceptConnections() {
+        try {
+            while (numPlayers < maxPlayers) {
+                Socket s = ss.accept();
+                DataOutputStream out = new DataOutputStream(s.getOutputStream());
+                DataInputStream in = new DataInputStream(s.getInputStream()); // Not sure if this is needed.
+                numPlayers++;
+                out.writeInt(numPlayers);
+                System.out.println("Player #" + numPlayers + " has connected.");
+                ReadFromClient rfc = new ReadFromClient(numPlayers, in);
+                WriteToClient wtc = new WriteToClient(numPlayers, out);
+                if (numPlayers == 1) {
+                    s1 = s;
+                    p1ReadRunnable = rfc;
+                    p1WriteRunnable = wtc;
+                } else if (numPlayers == 2) {
+                    s2 = s;
+                    p2ReadRunnable = rfc;
+                    p2WriteRunnable = wtc;
+                }
+            }
+            System.out.println("No longer accepting players.");
+        } catch (Exception e) {
+            System.out.println("Failed to accept connections.");
+        }
+    }
+
+    // Inner Classes
+    private class ReadFromClient implements Runnable {
+
+        private int playerID;
+        private DataInputStream in;
+        private int speed;
+
+        public ReadFromClient(int p, DataInputStream d) {
+            playerID = p;
+            in = d;
+            System.out.println("RFC" + playerID + " Runnable created.");
+        }
+        // This run() method continuously reads the clicks sent from GameCanvas and assigns it to speed variables foe ach of the players.
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    speed = in.readInt();
+                    if (playerID == 1) {
+                        p1Speed = speed;
+                    } else if (playerID == 2) {
+                        p2Speed = speed;
+                    }
+                    System.out.println("This code is reachable 3.");
+                } catch (IOException e) {
+                    System.out.println("RFC run() failed.");
+                }
+            }
+        }
+    }
+
+    private class WriteToClient implements Runnable {
+
+        private int playerID;
+        private DataOutputStream out;
+        public WriteToClient(int p, DataOutputStream d) {
+            playerID = p;
+            out = d;
+            System.out.println("WTC" + playerID + " Runnable created.");
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    out.writeInt(ropeSpeed);
+                    out.flush();
+                    System.out.println("This code is reachable 4.");
+                }
+            } catch (Exception e) {
+                System.out.println("WTC Run failed.");
+            }
+        }
+    }
+    public void startServerTimer() {
+        Timer speedCalculator = new Timer(1, new ActionListener() {
+    
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Calculate and set new rope speed based on current speeds sa Read
+                ropeSpeed = p1Speed + p2Speed; 
+            }
+            
+        });
+        speedCalculator.setRepeats(true);
+        speedCalculator.start();
+    }
+
+    // Method for starting threads
+    public void startThreads() {
+        // TODO Put code that sir says at the end of his video
+        Thread p1rrThread = new Thread(p1ReadRunnable);
+        Thread p2rrThread = new Thread(p2ReadRunnable);
+        Thread p1wrThread = new Thread(p1WriteRunnable);
+        Thread p2wrThread = new Thread(p2WriteRunnable);
+
+        p1rrThread.start();
+        p2rrThread.start();
+        p1wrThread.start();
+        p2wrThread.start();
+    }
+
+    public static void main(String args[]) {
+        GameServer gs = new GameServer();
+        gs.acceptConnections();
+        gs.startServerTimer();
+        gs.startThreads();
+    }
+
 }
