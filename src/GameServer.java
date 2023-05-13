@@ -1,8 +1,6 @@
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
-import java.awt.*;
 import java.awt.event.*;
 import javax.swing.Timer;
 
@@ -17,10 +15,6 @@ public class GameServer {
 
     private int p1Speed, p2Speed;
     private int ropeSpeed;
-
-    private ArrayList<Integer> p1InitialSpeeds, p2InitialSpeeds;
-    private ArrayList<Integer> ropeSpeeds;
-
 
     public GameServer() {
 
@@ -81,7 +75,6 @@ public class GameServer {
 
         private int playerID;
         private DataInputStream in;
-        private int speed;
 
         public ReadFromClient(int p, DataInputStream d) {
             playerID = p;
