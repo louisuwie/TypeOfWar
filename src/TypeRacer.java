@@ -99,10 +99,8 @@ public class TypeRacer {
                     }
                 }
             }
-
             @Override
             public void removeUpdate(DocumentEvent e) {}
-
             @Override
             public void changedUpdate(DocumentEvent e) {}
         });

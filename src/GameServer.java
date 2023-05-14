@@ -167,8 +167,7 @@ public class GameServer {
         }
     }
     public void startServerTimer() {
-        Timer speedCalculator = new Timer(1, new ActionListener() {
-    
+        Timer speedCalculator = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Calculate and set new rope speed based on current speeds sa Read
@@ -178,8 +177,7 @@ public class GameServer {
                 } else {
                     isSpeedSame = false;
                 }
-
-                ropeSpeed = p1Speed + p2Speed; 
+                ropeSpeed = p1Speed + p2Speed;
             }
             
         });

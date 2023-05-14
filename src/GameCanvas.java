@@ -27,7 +27,7 @@ import java.awt.event.*;
 public class GameCanvas extends JComponent {
 
 	RopeAssembly ropeAssembly;
-	Image bg, op;
+	Image backGround;
 	int clicks;
 	int velocity;
     
@@ -36,7 +36,7 @@ public class GameCanvas extends JComponent {
         setPreferredSize(new Dimension(1900,1080));
 		velocity = 0;
 		ropeAssembly = new RopeAssembly();
-		bg = new ImageIcon("DesignAssets/Background.png").getImage();
+		backGround = new ImageIcon("DesignAssets/Background.png").getImage();
     }
 
 	// Paint Component, shows the background and all.
@@ -44,7 +44,7 @@ public class GameCanvas extends JComponent {
 	protected void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g; // Cast into a g2d Object
 
-		g2d.drawImage(bg, 0, 0, 960, 540, null);
+		g2d.drawImage(backGround, 0, 0, 960, 540, null);
 		g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
 		ropeAssembly.draw(g2d);
 	}
@@ -87,7 +87,8 @@ public class GameCanvas extends JComponent {
 		};
 
 		am.put("Spacebar Press", sc);
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true), "Spacebar Press"); // Decided to go for true dito kasi I noticed na you can kinda cheat by just holdiing the Spacebar down
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true), "Spacebar Press");
+		// Decided to go for true dito kasi I noticed na you can kinda cheat by just holdiing the Spacebar down
 	}
 
 	public void passVelocity(int s) {
