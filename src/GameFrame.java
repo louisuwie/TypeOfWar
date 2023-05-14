@@ -18,59 +18,195 @@
 */
 
 /*
-    GameFrame.java handles all the features that happen within frame.
+    GameCanvas.java handles the graphics-side of the program.
 */
 
-
 import javax.swing.*;
+import java.awt.event.*;
 import java.awt.*;
 
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import java.io.*;
+import java.net.*;
 
+// TODO Implement ArrayLists to keep track of the speeds to avid lag
+// TODO Make the Start JButton show both GameCanvases
+// TODO Center the RopeAssembly image; Scale them properly because they are a little warped
+// TODO Add something to the middle for collision / Implement something that will end the game
+// TODO Interval Word Input
 
 public class GameFrame {
+    int playerID, ropeSpeed;
+    JFrame gameFrame, endScreenFrame;
+    JButton startButton;
+    JLabel jl;
+    Socket s;
+    GameCanvas gameCanvas;
+    JPanel backGround;
+    ReadFromServer rfsRunnable;
+    WriteToServer wtsRunnable;
+    Player player;
 
-    boolean gameVisibility = false;
+    public GameFrame() {
+        this.gameFrame = new JFrame();
+        this.backGround = new StartScreen();
+        this.gameCanvas = new GameCanvas();
+        this.startButton = new JButton("Start");
 
-    public GameFrame(){
+        //Position the Start JButton on the lower part of the screen
+        startButton.setBounds(430, 500, 100, 50);
 
-        /* INITIALISING OF VARIABLES */
-        JFrame gameUI = new JFrame("Type of War"); // Move to Client program
-        JLabel title = new JLabel("Are you ready to Type for War?");
-        JButton start = new JButton("Start?");
-        GameCanvas gc = new GameCanvas();
 
-        /* SPECIFIC DETAILING OF THE VARIABLES */
-        gameUI.setSize(1920,1080);
-        gameUI.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        gameUI.setLayout(new FlowLayout());
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-        /* ADDING FEATURES INTO FRAME */
-        gameUI.add(title);
-        gameUI.add(start);
-        gameUI.add(gc);
-        gc.addKeyBindings();
-        gc.setVisible(gameVisibility); // Hide the game stuff muna until the player STARTS
+                    startButton.setVisible(false);
+                    backGround.setVisible(false);
+                    gameCanvas.addKeyBindings();
+                    gameCanvas.startClickTimer();
+                    gameCanvas.startRepaintTimer();
+                    gameFrame.add(gameCanvas);
 
-        /* SET VISIBLE */
-        gameUI.setVisible(true);
-        gameUI.setResizable(false);
-
-        /* FRAME FEATURES */
-
-        //if Start button is clicked, it makes the button invisible and the title invisible
-        start.addActionListener(e -> {
-            start.setVisible(false);
-            title.setVisible(false);
-            gameVisibility = true;
-            gc.setVisible(gameVisibility);
+            }
+            
         });
+
+        backGround.add(startButton);
+        gameFrame.add(backGround);
+
+        this.playerID = 0;
+        this.player = null;
+        this.ropeSpeed = 0;
+    }
+
+    public void setUpGameFrame() {
+        gameFrame.setTitle("Type of War | Player #" + playerID);
+        gameFrame.setSize(960, 540);
+        gameFrame.setLocationRelativeTo(null);
+        gameFrame.setVisible(true);
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameFrame.setResizable(false);
+    }
+
+    public void connectToServer(String ip) {
+        try {
+            s = new Socket(ip, 2000);
+            DataOutputStream out = new DataOutputStream(s.getOutputStream());
+            DataInputStream in = new DataInputStream(s.getInputStream());
+            System.out.println("Connected to server " + ip);
+            playerID = in.readInt();
+            System.out.println("You are Player #" + playerID + ".");
+            // Instantiates a new Player class for each GameFrame that is connected to the GameServer
+            player = new Player(playerID);
+            rfsRunnable = new ReadFromServer(in);
+            wtsRunnable = new WriteToServer(out);
+            rfsRunnable.waitForStartMessage();
+
+            Thread read = new Thread(rfsRunnable);
+            Thread write = new Thread(wtsRunnable);
+
+            read.start();
+            write.start();
+
+            if (playerID == 1) System.out.print("Waiting for Player #2 to connect."); // for Player 1 only
+
+            if(RopeAssembly.getWinner() == 1) {
+                endScreenFrame = new JFrame();
+                endScreenFrame.add(new EndScreen());
+                System.out.println("Player 1 wins!");
+                backGround.setVisible(false);
+                endScreenFrame.setVisible(true);
+
+
+            } else if(RopeAssembly.getWinner() == 2) {
+                endScreenFrame = new JFrame();
+                endScreenFrame.add(new EndScreen());
+                System.out.println("Player 2 wins!");
+                backGround.setVisible(false);
+                endScreenFrame.setVisible(true);
+
+            } else {
+                System.out.println("No winner yet.");
+            }
+        } catch (Exception e) {
+            System.out.println("Unable to connect to server.");
         }
 
-        /* ACCESSOR METHODS */
-        public boolean getGameVisibility() {
-            return gameVisibility;
+
+    }
+
+    private class ReadFromServer implements Runnable {
+        private DataInputStream in;
+
+        private ReadFromServer(DataInputStream d) {
+            in = d;
+            System.out.println("RFS Runnable created");
         }
+
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    if (player != null) ropeSpeed = in.readInt();
+                    System.out.println("Rope Speed: " + ropeSpeed); //DEBUG
+                }
+            } catch (IOException e) {
+                System.out.println("RFS Run failed.");
+            }
+        }
+
+        public void waitForStartMessage() {
+             try {
+                String startMsg = in.readUTF();
+                System.out.println("Message from server: " + startMsg); 
+             } catch (IOException e) {
+                System.out.println("IO Exception from waitForStartMessage");
+             }
+        }
+    }
+
+    private class WriteToServer implements Runnable {
+        private DataOutputStream out;
+
+        private WriteToServer(DataOutputStream d) {
+            out = d;
+            System.out.println("WTS Runnable created");
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    if (player != null) {
+                        int clicks = gameCanvas.getClicks();
+                        player.calculateSpeed(clicks);
+
+                        out.writeInt(player.getSpeed());
+                        out.flush();
+                    }
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        System.out.println("Thread interrupted");
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("WTS Runnable failed.");
+            }
+        }
+    }
+
+    // Refreshes the velocity that is passed to gc every 1 second
+    public void setUpFrameTimers() {
+        Timer timer = new Timer(1000, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameCanvas.passVelocity(ropeSpeed);
+            }
+            
+        });
+        timer.setRepeats(true);
+        timer.start();
+    }
 }
-
-
