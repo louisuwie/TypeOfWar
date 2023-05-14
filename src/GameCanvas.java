@@ -50,26 +50,20 @@ public class GameCanvas extends JComponent {
 
 	// Repaints every 100ms
 	public void startRepaintTimer() {
+		Timer timer = new Timer(100, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
 
-			Timer timer = new Timer(100, new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-
-					ropeAssembly.resetRopeAssembly(velocity); // Change the sprite
-					ropeAssembly.tug(velocity); // Update the position
-					repaint();
-				}
-			});
-
-			if(RopeAssembly.getWinner() == 0){
-				timer.setRepeats(true);
-				timer.start();
+				System.out.println(ropeAssembly.getX());
+				ropeAssembly.resetRopeAssembly(velocity); // Change the sprite
+				ropeAssembly.tug(velocity); // Update the position
+				repaint();
 			}
-			else{
-				timer.stop();
-			}
-
+		});
+		timer.setRepeats(true);
+		timer.start();
 	}
+
 	//Resets the number of clicks every 2 seconds. 
 	public void startClickTimer() {
 		Timer clickTimer = new Timer(1000, new ActionListener() {
@@ -93,10 +87,8 @@ public class GameCanvas extends JComponent {
 				clicks++;
 			}
 		};
-
 		am.put("Spacebar Press", sc);
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true), "Spacebar Press");
-		// Decided to go for true dito kasi I noticed na you can kinda cheat by just holdiing the Spacebar down
 	}
 
 	public void passVelocity(int s) {

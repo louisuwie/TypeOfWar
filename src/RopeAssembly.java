@@ -22,22 +22,27 @@
 */
 
 import java.awt.*;
+import java.lang.reflect.Type;
 
 import javax.swing.ImageIcon;
 
 public class RopeAssembly {
     
 
-    Image gr, p1w, p2w, ss;
+    Image gr, p1w, p2w, ss, p1Winner, p2Winner, endScreen;
     Image current;
     int x;
     static int winner;
     static int y = 270;
+    boolean typing = false;
     GameFrame gameFrame;
+    GameCanvas gameCanvas;
     TypeRacer typeRacer;
     // Fields are not final. This is where we import the Rope Assembly Graphics
 
     public RopeAssembly() {
+
+        typeRacer = new TypeRacer();
         
         gr = new ImageIcon("DesignAssets/GetReady.PNG").getImage();
         current = gr;
@@ -45,6 +50,8 @@ public class RopeAssembly {
         p1w = new ImageIcon("DesignAssets/P1Win.PNG").getImage();
         p2w = new ImageIcon("DesignAssets/P2Win.PNG").getImage();
         ss = new ImageIcon("DesignAssets/SameSpeed.png").getImage();
+
+        p1Winner = new ImageIcon ("DesignAssets/P1WinnerScreen.png").getImage();
 
         x = 150;
     }
@@ -59,6 +66,22 @@ public class RopeAssembly {
 
     public void tug(int v) {
 
+        x = x + v;
+
+        if(x <= 50){
+            gameTwist();
+            typing = true;
+        } else if(x <= 100){
+            gameTwist();
+            typing = true;
+        } else if (x >= 250){
+            gameTwist();
+            typing = true;
+        } else if (x >= 200){
+            gameTwist();
+            typing = true;
+        }
+
         if(winner != 0){ // If there is a winner, stop the game
             System.out.println("Game Over");
         }
@@ -66,22 +89,10 @@ public class RopeAssembly {
         if(x > 400){ // If the rope is pulled too far, stop the game
             winner = 2;
             System.out.println("Player 2 Wins!");
-        } else if (x < 0) {
+            current = p1Winner;
+        } else if (x <= 0) {
             winner = 1;
             System.out.println("Player 1 Wins!");
-        }
-        else{
-            x += v;
-        }
-
-        if(x == 50){
-            gameTwist();
-        } else if(x == 100){
-            gameTwist();
-        } else if (x == 200){
-            gameTwist();
-        } else if (x == 250){
-            gameTwist();
         }
 
         System.out.println(x);
@@ -102,13 +113,25 @@ public class RopeAssembly {
         if(typeRacer.isTyped()){
             if(gameFrame.getPlayerID() == 1){
                 x += 30;
+                typing = false;
+                gameCanvas.startRepaintTimer();
             } else if (gameFrame.getPlayerID() == 2){
                 x += 30;
+                typing = false;
+                gameCanvas.startRepaintTimer();
             }
         }
     }
 
     public static int getWinner() {
         return winner;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public boolean isTyping(){
+        return typing;
     }
 }

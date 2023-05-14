@@ -148,7 +148,7 @@ public class GameServer {
                     out.writeInt(ropeSpeed);
                     out.flush();
                     try {
-                        Thread.sleep(25);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         System.out.println("Thread interrupted");
                     }
@@ -167,7 +167,7 @@ public class GameServer {
         }
     }
     public void startServerTimer() {
-        Timer speedCalculator = new Timer(1000, new ActionListener() {
+        Timer speedCalculator = new Timer(50, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Calculate and set new rope speed based on current speeds sa Read
