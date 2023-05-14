@@ -34,7 +34,5 @@ public class GameStarter {
         gameFrame.setUpGameFrame();
         gameFrame.setUpFrameTimers();
         in.close();
-
     }
-    
 }

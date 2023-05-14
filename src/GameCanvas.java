@@ -33,7 +33,6 @@ public class GameCanvas extends JComponent {
     
     public GameCanvas() {
         setFocusable(true);
-        setPreferredSize(new Dimension(1900,1080));
 		velocity = 0;
 		ropeAssembly = new RopeAssembly();
 		backGround = new ImageIcon("DesignAssets/Background.png").getImage();
@@ -51,16 +50,25 @@ public class GameCanvas extends JComponent {
 
 	// Repaints every 100ms
 	public void startRepaintTimer() {
+
 			Timer timer = new Timer(100, new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+
 					ropeAssembly.resetRopeAssembly(velocity); // Change the sprite
 					ropeAssembly.tug(velocity); // Update the position
 					repaint();
 				}
 			});
-			timer.setRepeats(true);
-			timer.start();
+
+			if(RopeAssembly.getWinner() == 0){
+				timer.setRepeats(true);
+				timer.start();
+			}
+			else{
+				timer.stop();
+			}
+
 	}
 	//Resets the number of clicks every 2 seconds. 
 	public void startClickTimer() {

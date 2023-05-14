@@ -45,6 +45,7 @@ public class RopeAssembly {
         p2w = new ImageIcon("DesignAssets/P2Win.PNG").getImage();
         ss = new ImageIcon("DesignAssets/SameSpeed.png").getImage();
 
+
         x = 140;
     }
 
@@ -60,6 +61,7 @@ public class RopeAssembly {
 
         if(winner != 0){
             System.out.println("Game Over");
+
         }
 
         if(x > 400){

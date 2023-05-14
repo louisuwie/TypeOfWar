@@ -107,26 +107,6 @@ public class GameFrame {
 
             if (playerID == 1) System.out.print("Waiting for Player #2 to connect."); // for Player 1 only
 
-            if(RopeAssembly.getWinner() == 1) {
-                endScreenFrame = new JFrame();
-                endScreenFrame.add(new EndScreen());
-                System.out.println("Player 1 wins!");
-                Thread.sleep(10000);
-                backGround.setVisible(false);
-                endScreenFrame.setVisible(true);
-
-
-            } else if(RopeAssembly.getWinner() == 2) {
-                endScreenFrame = new JFrame();
-                endScreenFrame.add(new EndScreen());
-                System.out.println("Player 2 wins!");
-                Thread.sleep(10000);
-                backGround.setVisible(false);
-                endScreenFrame.setVisible(true);
-
-            } else {
-                System.out.println("No winner yet.");
-            }
         } catch (Exception e) {
             System.out.println("Unable to connect to server.");
         }

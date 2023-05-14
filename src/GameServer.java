@@ -167,7 +167,7 @@ public class GameServer {
         }
     }
     public void startServerTimer() {
-        Timer speedCalculator = new Timer(100, new ActionListener() {
+        Timer speedCalculator = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Calculate and set new rope speed based on current speeds sa Read
@@ -184,7 +184,6 @@ public class GameServer {
         speedCalculator.setRepeats(true);
         speedCalculator.start();
     }
-
     // Method for starting threads
 
     public static void main(String args[]) {
