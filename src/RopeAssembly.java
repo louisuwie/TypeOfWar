@@ -34,6 +34,7 @@ public class RopeAssembly {
     static int winner;
     static int y = 270;
     GameFrame gameFrame;
+    TypeRacer typeRacer;
     // Fields are not final. This is where we import the Rope Assembly Graphics
 
     public RopeAssembly() {
@@ -45,8 +46,7 @@ public class RopeAssembly {
         p2w = new ImageIcon("DesignAssets/P2Win.PNG").getImage();
         ss = new ImageIcon("DesignAssets/SameSpeed.png").getImage();
 
-
-        x = 140;
+        x = 150;
     }
 
     public void setGameFrame(GameFrame gameframe){
@@ -59,12 +59,11 @@ public class RopeAssembly {
 
     public void tug(int v) {
 
-        if(winner != 0){
+        if(winner != 0){ // If there is a winner, stop the game
             System.out.println("Game Over");
-
         }
 
-        if(x > 400){
+        if(x > 400){ // If the rope is pulled too far, stop the game
             winner = 2;
             System.out.println("Player 2 Wins!");
         } else if (x < 0) {
@@ -74,6 +73,17 @@ public class RopeAssembly {
         else{
             x += v;
         }
+
+        if(x == 50){
+            gameTwist();
+        } else if(x == 100){
+            gameTwist();
+        } else if (x == 200){
+            gameTwist();
+        } else if (x == 250){
+            gameTwist();
+        }
+
         System.out.println(x);
     }
     public void resetRopeAssembly(int vel) {
@@ -83,6 +93,18 @@ public class RopeAssembly {
             current = p1w;
         } else {
             current = p2w;
+        }
+    }
+
+    public void gameTwist(){
+        typeRacer.initialize();
+
+        if(typeRacer.isTyped()){
+            if(gameFrame.getPlayerID() == 1){
+                x += 30;
+            } else if (gameFrame.getPlayerID() == 2){
+                x += 30;
+            }
         }
     }
 

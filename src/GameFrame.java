@@ -174,6 +174,10 @@ public class GameFrame {
         }
     }
 
+    public int getPlayerID() {
+        return playerID;
+    }
+
     // Refreshes the velocity that is passed to gc every 1 second
     public void setUpFrameTimers() {
         Timer timer = new Timer(10000, new ActionListener() {

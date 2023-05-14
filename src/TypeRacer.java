@@ -37,6 +37,7 @@ public class TypeRacer {
     private JTextField textField;
     private JLabel typeThis;
     boolean isCorrect = false;
+    boolean typed = false;
 
     public void initialize() {
         // create a JFrame
@@ -90,6 +91,7 @@ public class TypeRacer {
                         if (textField.getText().equals(randomWord)) {
                             isCorrect = true;
                             System.out.println("Correct!");
+                            typed = true;
                             typeRacerFrame.dispose();
                         }
 
@@ -107,5 +109,9 @@ public class TypeRacer {
 
         // make the JFrame visible
         typeRacerFrame.setVisible(true);
+    }
+
+    public boolean isTyped(){
+        return typed;
     }
 }
