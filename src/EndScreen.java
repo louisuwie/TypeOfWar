@@ -26,27 +26,28 @@ import java.awt.*;
 import javax.swing.*;
 
 public class EndScreen extends JPanel{
-
-    JButton startButton;
-    Image winnerIcon;
-    boolean isStart;
+    Image winnerIcon, backGround;
+    boolean chickenDinner = false;
 
     public EndScreen() {
 
         //TODO FIX TO PROPER IMAGE (WINNER ICON) AND SHOW IT PROPERLY AFTER GAME ENDS.
 
+        backGround = new ImageIcon("Background").getImage();
+
         if(RopeAssembly.getWinner() == 1){
             this.winnerIcon = new ImageIcon("DesignAssets/P1Win.PNG").getImage();
+            boolean chickenDinner = true;
         } else if (RopeAssembly.getWinner() == 2){
             this.winnerIcon = new ImageIcon("DesignAssets/P2Win.PNG").getImage();
+            boolean chickenDinner = true;
         }
-
-        setPreferredSize(new Dimension(960, 540));
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g; // Cast into a g2d Object
+        g2d.drawImage(backGround, 0, 0,960, 540, null);
         g2d.drawImage(winnerIcon, 0, 0,960, 540, null);
     }
 }

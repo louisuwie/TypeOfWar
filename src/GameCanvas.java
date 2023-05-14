@@ -26,7 +26,7 @@ import java.awt.event.*;
 
 public class GameCanvas extends JComponent {
 
-	RopeAssembly ra;
+	RopeAssembly ropeAssembly;
 	Image bg, op;
 	int clicks;
 	int velocity;
@@ -35,37 +35,36 @@ public class GameCanvas extends JComponent {
         setFocusable(true);
         setPreferredSize(new Dimension(1900,1080));
 		velocity = 0;
-		ra = new RopeAssembly();
+		ropeAssembly = new RopeAssembly();
 		bg = new ImageIcon("DesignAssets/Background.png").getImage();
     }
 
 
-	// Paint Component
+	// Paint Component, shows the background and all.
 	@Override
 	protected void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g; // Cast into a g2d Object
 
 		g2d.drawImage(bg, 0, 0, 960, 540, null);
 		g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
-		ra.draw(g2d);
+		ropeAssembly.draw(g2d);
 	}
 
 	// Repaints every 100ms
 	public void startRepaintTimer() {
-		Timer timer = new Timer(100, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ra.resetRopeAssembly(velocity); // Change the sprite
-				ra.tug(velocity); // Update the position
-				repaint();
-			}
-		});
-		timer.setRepeats(true);
-		timer.start();
-
+			Timer timer = new Timer(100, new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					ropeAssembly.resetRopeAssembly(velocity); // Change the sprite
+					ropeAssembly.tug(velocity); // Update the position
+					repaint();
+				}
+			});
+			timer.setRepeats(true);
+			timer.start();
+		
 	}
-
-
+	//Resets the number of clicks every 2 seconds. 
 	public void startClickTimer() {
 		Timer clickTimer = new Timer(2000, new ActionListener() {
 			@Override
