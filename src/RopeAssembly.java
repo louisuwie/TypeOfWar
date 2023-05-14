@@ -33,7 +33,7 @@ public class RopeAssembly {
     int x;
     static int winner;
     static int y = 270;
-
+    GameFrame gameFrame;
     // Fields are not final. This is where we import the Rope Assembly Graphics
 
     public RopeAssembly() {
@@ -48,22 +48,31 @@ public class RopeAssembly {
         x = 140;
     }
 
+    public void setGameFrame(GameFrame gameframe){
+        this.gameFrame = gameframe;
+    }
+
     public void draw(Graphics2D g2d) {
         g2d.drawImage(current, x, y, 600, 200, null);
     }
 
     public void tug(int v) {
-        if(x == 360){
+
+        if(winner != 0){
+            System.out.println("Game Over");
+        }
+
+        if(x > 400){
             winner = 2;
             System.out.println("Player 2 Wins!");
-
-        } else if (x == 0) {
+        } else if (x < 0) {
             winner = 1;
             System.out.println("Player 1 Wins!");
         }
         else{
             x += v;
         }
+        System.out.println(x);
     }
     public void resetRopeAssembly(int vel) {
         if (vel == 0) {

@@ -36,23 +36,23 @@ public class Player {
     }
 
     public void calculateSpeed(int clicks) {
-        if (playerID == 1) {
-            if (clicks <= 1) {
-                speed = low * -1;
-            } else if (clicks <= 4) {
-                speed = med * -1;
-            } else if (clicks <= 8) {
-                speed = high * -1;
-            }
-        } else if (playerID == 2) {
-            if (clicks <= 1) {
-                speed = low;
-            } else if (clicks <= 4) {
-                speed = med;
-            } else if (clicks <= 8) {
-                speed = high;
-            }
+
+        if (clicks == 0) {
+            speed = 0;
         }
+        else if(clicks ==1) {
+            speed = low;
+        }
+        else if (clicks <= 4) {
+            speed = med;
+        } else if (clicks <= 8) {
+            speed = high;
+        }
+
+        if(playerID == 1){
+            speed = speed * -1;
+        }
+
     }
 
     public int getSpeed() {

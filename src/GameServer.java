@@ -38,11 +38,14 @@ public class GameServer {
 
     private int p1Speed, p2Speed;
     private int ropeSpeed;
+    private boolean isSpeedSame;
 
     public GameServer() {
 
+        ropeSpeed = 0;
         numPlayers = 0;
         maxPlayers = 2;
+        isSpeedSame = false;
 
         try {
             ss = new ServerSocket(2000);
@@ -59,6 +62,7 @@ public class GameServer {
                 DataOutputStream out = new DataOutputStream(s.getOutputStream());
                 DataInputStream in = new DataInputStream(s.getInputStream()); // Not sure if this is needed.
                 numPlayers++;
+
                 out.writeInt(numPlayers);
                 System.out.println("Player #" + numPlayers + " has connected.");
                 ReadFromClient rfc = new ReadFromClient(numPlayers, in);
@@ -113,8 +117,10 @@ public class GameServer {
                 while (true) {
                     if (playerID == 1) {
                         p1Speed = in.readInt();
+                        System.out.println("Reading from player 1. Speed: " + p1Speed);
                     } else if (playerID == 2) {
                         p2Speed = in.readInt();
+                        System.out.println("Reading from player 2. Speed: " + p2Speed);
                     }
                 }
             } catch (Exception e) {
@@ -137,6 +143,8 @@ public class GameServer {
         public void run() {
             try {
                 while (true) {
+
+                    System.out.println("ROPE SPEED: " + ropeSpeed);
                     out.writeInt(ropeSpeed);
                     out.flush();
                     try {
@@ -164,6 +172,13 @@ public class GameServer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Calculate and set new rope speed based on current speeds sa Read
+
+                if(ropeSpeed == p1Speed + p2Speed) {
+                    isSpeedSame = true;
+                } else {
+                    isSpeedSame = false;
+                }
+
                 ropeSpeed = p1Speed + p2Speed; 
             }
             

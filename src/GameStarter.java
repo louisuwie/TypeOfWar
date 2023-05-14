@@ -29,11 +29,12 @@ public class GameStarter {
         Scanner in = new Scanner(System.in);
         System.out.print("IP Address: ");
         String ip = in.next();
-        GameFrame gf = new GameFrame();
-        gf.connectToServer(ip);
-        gf.setUpGameFrame();
-        gf.setUpFrameTimers();
+        GameFrame gameFrame = new GameFrame();
+        gameFrame.connectToServer(ip);
+        gameFrame.setUpGameFrame();
+        gameFrame.setUpFrameTimers();
         in.close();
+
     }
     
 }

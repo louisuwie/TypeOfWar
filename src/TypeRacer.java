@@ -101,7 +101,6 @@ public class TypeRacer {
             }
 
             @Override
-
             public void removeUpdate(DocumentEvent e) {}
 
             @Override

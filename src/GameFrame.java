@@ -50,25 +50,22 @@ public class GameFrame {
         this.gameFrame = new JFrame();
         this.backGround = new StartScreen();
         this.gameCanvas = new GameCanvas();
+        this.gameCanvas.getRopeAssembly().setGameFrame(this); //gives RopeAssembly access to gameFrame
         this.startButton = new JButton("Start");
 
         //Position the Start JButton on the lower part of the screen
         startButton.setBounds(430, 500, 100, 50);
 
-
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                     startButton.setVisible(false);
                     backGround.setVisible(false);
                     gameCanvas.addKeyBindings();
                     gameCanvas.startClickTimer();
                     gameCanvas.startRepaintTimer();
                     gameFrame.add(gameCanvas);
-
             }
-            
         });
 
         backGround.add(startButton);
@@ -133,8 +130,6 @@ public class GameFrame {
         } catch (Exception e) {
             System.out.println("Unable to connect to server.");
         }
-
-
     }
 
     private class ReadFromServer implements Runnable {

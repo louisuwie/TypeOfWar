@@ -39,7 +39,6 @@ public class GameCanvas extends JComponent {
 		bg = new ImageIcon("DesignAssets/Background.png").getImage();
     }
 
-
 	// Paint Component, shows the background and all.
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -62,11 +61,10 @@ public class GameCanvas extends JComponent {
 			});
 			timer.setRepeats(true);
 			timer.start();
-		
 	}
 	//Resets the number of clicks every 2 seconds. 
 	public void startClickTimer() {
-		Timer clickTimer = new Timer(2000, new ActionListener() {
+		Timer clickTimer = new Timer(1000, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				clicks = 0;
@@ -92,11 +90,13 @@ public class GameCanvas extends JComponent {
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true), "Spacebar Press"); // Decided to go for true dito kasi I noticed na you can kinda cheat by just holdiing the Spacebar down
 	}
 
+	public void passVelocity(int s) {
+		this.velocity = s;
+	}
 	public int getClicks() {
 		return clicks;
 	}
-
-	public void passVelocity(int s) {
-		this.velocity = s;
+	public RopeAssembly getRopeAssembly() {
+		return ropeAssembly;
 	}
 }
