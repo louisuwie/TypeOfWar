@@ -36,6 +36,7 @@ public class TypeRacer extends JFrame {
     private JTextField textField;
     private JLabel typeThis;
     boolean isCorrect = false;
+    int i = 0;
 
     public void initialize() {
         // create a JFrame
@@ -85,20 +86,12 @@ public class TypeRacer extends JFrame {
             public void insertUpdate(DocumentEvent e) {
                 try {
                     // check if the JTextField's word is equal to the target randomWord
-                    for (int i = 0; i < textField.getText().length(); i++) {
+                    for (i = 0; i < textField.getText().length(); i++) {
                         if (textField.getText().charAt(i) == randomWord.charAt(i)) {
                             if (textField.getText().equals(randomWord)) {
                                 isCorrect = true;
                                 System.out.println("Correct!");
-
-                                // Create a timer for the JFrame to close after 5 seconds.
-                                Timer timer = new Timer(3500, new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        dispose();
-                                    }
-                                });
-                                dispose();
+                                setVisible(false);
                             }
                         } else {
                             isCorrect = false;
@@ -124,5 +117,18 @@ public class TypeRacer extends JFrame {
 
         // make the JFrame visible
         setVisible(true);
+
+    }
+    
+    public void startTypeRacerTimer() {
+        Timer timer = new Timer(5000, new ActionListener() {
+    
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+            }
+        });
+        timer.setRepeats(true);
+        timer.start();
     }
 }

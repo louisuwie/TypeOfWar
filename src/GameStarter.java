@@ -21,6 +21,7 @@
     GameCanvas.java handles the graphics-side of the program.
 */
 
+// TODO Remove all debugging statements na! :D 
 import java.util.Scanner;
 import javax.swing.*;
 import java.awt.event.*;
@@ -36,19 +37,25 @@ public class GameStarter {
         gf.setUpGameFrame();
         gf.setUpFrameTimers();
         in.close();
-        
-        TypeRacer typeRacer = new TypeRacer();
-
+                
         // Instantiates a new frame every 10 seconds, feel free to edit
         Timer timer = new Timer(10000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                typeRacer.initialize();
+            
+                GameCanvas gc = gf.getCanvas();
+                RopeAssembly ra = gc.getRopeAssembly();
+                int winner = ra.getWinner();
+                
+                if (winner == 0) {
+                    TypeRacer typeRacer = new TypeRacer();
+                    typeRacer.initialize();
+                    typeRacer.startTypeRacerTimer();
+                }
             }
             
         });
         timer.setRepeats(true);
         timer.start();
     }
-    
 }

@@ -23,57 +23,55 @@
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.*;
 
 import java.io.*;
 import java.net.*;
-
-// TODO Implement ArrayLists to keep track of the speeds to avid lag
-// TODO Make the Start JButton show both GameCanvases
-// TODO Center the RopeAssembly image; Scale them properly because they are a little warped
-// TODO Add something to the middle for collision / Implement something that will end the game
-// TODO Interval Word Input
+import javax.sound.sampled.*;
 
 public class GameFrame {
     int playerID, ropeSpeed;
-    private boolean gameEnded; // Flag to indicate if the game has ended
     JFrame gameFrame, endScreenFrame;
     JButton startButton;
     JLabel jl;
     Socket s;
+    boolean isStarting;
+
     GameCanvas gameCanvas;
-    JPanel backGround, endFrame;
+    JPanel startScreen;
+
     ReadFromServer rfsRunnable;
     WriteToServer wtsRunnable;
     Player player;
 
     public GameFrame() {
+
         this.gameFrame = new JFrame();
-        this.endFrame = new EndScreen();
-        this.backGround = new StartScreen();
+
+        // All the screens we need!
+        this.startScreen = new StartScreen();
         this.gameCanvas = new GameCanvas();
+        this.isStarting = false;
+
+        // TODO If may time, make the Start button start both GameCanvases?
         this.startButton = new JButton("Start");
 
-        //Position the Start JButton on the lower part of the screen
+        // TODO Reposition button.
         startButton.setBounds(430, 500, 100, 50);
-
-
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                     startButton.setVisible(false);
-                    backGround.setVisible(false);
+                    startScreen.setVisible(false);
                     gameCanvas.addKeyBindings();
                     gameCanvas.startClickTimer();
                     gameCanvas.startRepaintTimer();
                     gameFrame.add(gameCanvas);
-            }
-
+                    isStarting = true;
+                   }
         });
 
-        backGround.add(startButton);
-        gameFrame.add(backGround);
-
+        startScreen.add(startButton);
+        gameFrame.add(startScreen);
         this.playerID = 0;
         this.player = null;
         this.ropeSpeed = 0;
@@ -86,6 +84,15 @@ public class GameFrame {
         gameFrame.setVisible(true);
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setResizable(false);
+        try {
+            File file = new File("DesignAssets/bgm.wav");
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+        } catch (Exception e) {
+            System.out.println("Music is not working.");
+        }
     }
 
     public void connectToServer(String ip) {
@@ -100,25 +107,15 @@ public class GameFrame {
             player = new Player(playerID);
             rfsRunnable = new ReadFromServer(in);
             wtsRunnable = new WriteToServer(out);
+
             rfsRunnable.waitForStartMessage();
 
             Thread read = new Thread(rfsRunnable);
             Thread write = new Thread(wtsRunnable);
-
             read.start();
             write.start();
-
+            
             if (playerID == 1) System.out.print("Waiting for Player #2 to connect."); // for Player 1 only
-
-            if(RopeAssembly.getWinner() == 1) {
-                gameFrame.add(endFrame);
-
-            } else if(RopeAssembly.getWinner() == 2) {
-                gameFrame.add(endFrame);
-
-            } else {
-                System.out.println("No winner yet.");
-            }
         } catch (Exception e) {
             System.out.println("Unable to connect to server.");
         }
@@ -169,7 +166,6 @@ public class GameFrame {
                     if (player != null) {
                         int clicks = gameCanvas.getClicks();
                         player.calculateSpeed(clicks);
-
                         out.writeInt(player.getSpeed());
                         out.flush();
                     }
@@ -198,4 +194,11 @@ public class GameFrame {
         timer.setRepeats(true);
         timer.start();
     }
+
+    public GameCanvas getCanvas() {
+        return gameCanvas;
+    }
+
+
+    
 }

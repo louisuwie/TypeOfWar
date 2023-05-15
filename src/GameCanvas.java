@@ -27,7 +27,7 @@ import java.awt.event.*;
 public class GameCanvas extends JPanel {
 
 	RopeAssembly ropeAssembly;
-	Image bg, op;
+	Image currentScreen, bg, p1ws, p2ws;
 	int clicks, referenceClicks;
 	int velocity;
 
@@ -35,10 +35,14 @@ public class GameCanvas extends JPanel {
     
     public GameCanvas() {
         setFocusable(true);
-        setPreferredSize(new Dimension(1900,1080));
 		velocity = 0;
 		ropeAssembly = new RopeAssembly();
+		
 		bg = new ImageIcon("DesignAssets/Background.png").getImage();
+		p1ws = new ImageIcon("DesignAssets/P1WinnerScreen.png").getImage();
+		p2ws = new ImageIcon("DesignAssets/P2WinnerScreen.jpeg").getImage();
+
+		currentScreen = bg;
     }
 
 
@@ -46,10 +50,23 @@ public class GameCanvas extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g; // Cast into a g2d Object
-
-		g2d.drawImage(bg, 0, 0, 960, 540, null);
 		g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
-		ropeAssembly.draw(g2d);
+		
+		if (ropeAssembly.getX() > 960/2 || ropeAssembly.getX() + ropeAssembly.getWidth() < 960/2) {
+			if (ropeAssembly.getX() > 960/2) {
+				currentScreen = p2ws;
+				ropeAssembly.setWinner(2);
+				g2d.drawImage(currentScreen, 0, 0, 960, 540, null);
+			} else if (ropeAssembly.getX() + ropeAssembly.getWidth() < 960/2) {
+				currentScreen = p1ws;
+				ropeAssembly.setWinner(1);
+				g2d.drawImage(currentScreen, 0, 0, 960, 540, null);
+			}
+		} else {
+			currentScreen = bg;
+			g2d.drawImage(currentScreen, 0, 0, 960, 540, null);
+			ropeAssembly.draw(g2d);
+		}
 	}
 
 	// Repaints every 100ms
@@ -57,20 +74,17 @@ public class GameCanvas extends JPanel {
 			Timer timer = new Timer(100, new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					ropeAssembly.resetRopeAssembly(velocity); // Change the sprite
-					ropeAssembly.tug(velocity); // Update the position
-					repaint();
+					if (ropeAssembly.getWinner() == 0) {
+						ropeAssembly.resetRopeAssembly(velocity); // Change the sprite
+						ropeAssembly.tug(velocity); // Update the position
+						repaint();
+					} else {
+						repaint();
+					} 
 				}
 			});
-
-			if(ropeAssembly.isThereAWinner()) {
-				velocity = 0;
-				ropeAssembly.gameOver();
-				timer.stop();
-			}else{
-				timer.setRepeats(true);
-				timer.start();
-			}
+			timer.setRepeats(true);
+			timer.start();
 	}
 	//Resets the number of clicks every 2 seconds. 
 	public void startClickTimer() {
@@ -81,15 +95,8 @@ public class GameCanvas extends JPanel {
 				clicks = 0;
 			}
 		});
-
-		if(ropeAssembly.isThereAWinner()) {
-			clicks = 0;
-			ropeAssembly.gameOver();
-			clickTimer.stop();
-		}else{
-			clickTimer.setRepeats(true);
-			clickTimer.start();
-		}
+		clickTimer.setRepeats(true);
+		clickTimer.start();
 	}
 
     public void addKeyBindings() {
@@ -117,5 +124,9 @@ public class GameCanvas extends JPanel {
 
 	public void passVelocity(int s) {
 		this.velocity = s;
+	}
+
+	public RopeAssembly getRopeAssembly() {
+		return ropeAssembly;
 	}
 }

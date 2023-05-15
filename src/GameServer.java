@@ -76,7 +76,7 @@ public class GameServer {
                     // At this point, there are 2 players connected already.
                     p1WriteRunnable.sendStartMessage();
                     p2WriteRunnable.sendStartMessage();
-
+                    
                     // Start the threads
                     Thread read1 = new Thread(p1ReadRunnable);
                     Thread read2 = new Thread(p2ReadRunnable);

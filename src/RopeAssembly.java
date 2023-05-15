@@ -31,45 +31,30 @@ public class RopeAssembly {
     Image gr, p1w, p2w, ss, p1Won, p2Won;
     Image current;
     int x;
-    static int winner;
+    int winner;
     static int y = 270;
+    int width = 601;
     boolean thereIsWinner = false;
 
-    // Fields are not final. This is where we import the Rope Assembly Graphics
-
+    // TODO Modify the WIDTH and HEIGHT of the rope assembly based on new File
     public RopeAssembly() {
-        
         gr = new ImageIcon("DesignAssets/GetReady.PNG").getImage();
         current = gr;
-
         p1w = new ImageIcon("DesignAssets/P1Win.PNG").getImage();
         p2w = new ImageIcon("DesignAssets/P2Win.PNG").getImage();
         ss = new ImageIcon("DesignAssets/SameSpeed.png").getImage();
-
         p1Won = new ImageIcon("P1WinnerScreen.png").getImage();
         p2Won = new ImageIcon("P2WinnerScreen.png").getImage();
-
-        x = 140;
+        x = 140; // TODO Finalize coordinates for center?
+        winner = 0;
     }
 
     public void draw(Graphics2D g2d) {
-        g2d.drawImage(current, x, y, 600, 200, null);
+        g2d.drawImage(current, x, y, width, 200, null);
     }
 
     public void tug(int v) {
-        if(x > 360){
-            winner = 2;
-            System.out.println("Player 2 Wins!");
-            thereIsWinner = true;
-        } else if (x < 0) {
-
-            winner = 1;
-            System.out.println("Player 1 Wins!");
-            thereIsWinner = true;
-        }
-        else{
-            x += v;
-        }
+        x += v;
     }
     public void resetRopeAssembly(int vel) {
         if (vel == 0) {
@@ -81,30 +66,20 @@ public class RopeAssembly {
         }
     }
 
-    public void gameOver(){
-        if (thereIsWinner) {
-            if(x > 360){
-                x = 140;
-                winner = 2;
-                System.out.println("Player 2 Wins!");
-                thereIsWinner = true;
-                current = p2Won;
-            } else if (x < 0) {
-                x = 140;
-                winner = 1;
-                System.out.println("Player 1 Wins!");
-                thereIsWinner = true;
-                current = p1Won;
-            }
-        }
+    public void setWinner(int i) {
+        winner = i;
     }
 
-    public static int getWinner() {
+    public int getWinner() {
         return winner;
     }
 
-    public boolean isThereAWinner() {
-        return thereIsWinner;
+    public int getX() {
+        return x;
+    }
+
+    public int getWidth() {
+        return width;
     }
 
 }
