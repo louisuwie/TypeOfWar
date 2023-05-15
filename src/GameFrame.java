@@ -136,7 +136,7 @@ public class GameFrame {
             try {
                 while (true) {
                     if (player != null) ropeSpeed = in.readInt();
-                    System.out.println("Rope Speed: " + ropeSpeed); //DEBUG
+
                 }
             } catch (IOException e) {
                 System.out.println("RFS Run failed.");
