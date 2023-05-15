@@ -127,11 +127,12 @@ public class TypeRacer extends JFrame {
     }
     
     public void startTypeRacerTimer() {
-        Timer timer = new Timer(5000, new ActionListener() {
+        Timer timer = new Timer(4000, new ActionListener() {
     
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
+                dispose();
             }
         });
         timer.setRepeats(true);
