@@ -18,7 +18,8 @@
 */
 
 /*
-    GameCanvas.java handles the graphics-side of the program.
+    StartScreen.java handles the StartScreen of the program.
+    It is the graphics that the player sees before 'Start' button is clicked.
 */
 
 

@@ -18,7 +18,9 @@
 */
 
 /*
-    GameCanvas.java handles the graphics-side of the program.
+    Player.java handles the player-side of the program.
+    It handles the respective information of each player.
+    Like playerID and Speed.
 */
 
 public class Player {

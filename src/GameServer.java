@@ -18,7 +18,8 @@
 */
 
 /*
-    GameCanvas.java handles the graphics-side of the program.
+    GameServer handles the server-side of the program. It instantiates the amount
+    of players (max of 2) and handles the communication between the two players.
 */
 
 import java.io.*;

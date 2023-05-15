@@ -20,7 +20,13 @@ import javax.swing.*;
 */
 
 /*
-    GameCanvas.java handles the graphics-side of the program.
+    TypeRacer.java is the twist of the game. From a normal 'Tug of war',
+    TypeRacer.java includes the features of a normal typeracer game, integrated
+    in this Tug of War. Hence, type of war.
+
+    It takes a random word from the list of words in the file, and the player
+    has to type it in an interval of 4 seconds. If the player types the word
+    first, he/she gets to spam spacebars again first.
 */
 
 import javax.swing.event.DocumentEvent;

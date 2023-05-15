@@ -18,7 +18,8 @@
 */
 
 /*
-    GameCanvas.java handles the graphics-side of the program.
+    RopeAssembly.java handles the graphics-side of the program.
+    It handles what icon to be used depending on who is winning the tug.
 */
 
 import java.awt.*;
@@ -26,26 +27,26 @@ import java.awt.*;
 import javax.swing.ImageIcon;
 
 public class RopeAssembly {
-    
-
     Image gr, p1w, p2w, ss, p1Won, p2Won;
     Image current;
     int x;
     int winner;
     static int y = 270;
-    int width = 601;
+    int width = 400;
     boolean thereIsWinner = false;
 
     // TODO Modify the WIDTH and HEIGHT of the rope assembly based on new File
     public RopeAssembly() {
         gr = new ImageIcon("DesignAssets/GetReady.PNG").getImage();
         current = gr;
+
         p1w = new ImageIcon("DesignAssets/P1Win.PNG").getImage();
         p2w = new ImageIcon("DesignAssets/P2Win.PNG").getImage();
         ss = new ImageIcon("DesignAssets/SameSpeed.png").getImage();
+
         p1Won = new ImageIcon("P1WinnerScreen.png").getImage();
         p2Won = new ImageIcon("P2WinnerScreen.png").getImage();
-        x = 140; // TODO Finalize coordinates for center?
+        x = 280; // TODO Finalize coordinates for center?
         winner = 0;
     }
 
@@ -56,6 +57,7 @@ public class RopeAssembly {
     public void tug(int v) {
         x += v;
     }
+
     public void resetRopeAssembly(int vel) {
         if (vel == 0) {
             current = ss;
@@ -81,5 +83,4 @@ public class RopeAssembly {
     public int getWidth() {
         return width;
     }
-
 }

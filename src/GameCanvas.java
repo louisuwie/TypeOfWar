@@ -19,13 +19,17 @@
 
 /*
     GameCanvas.java handles the graphics-side of the program.
+    It interacts with different classes to display the game,
+    and it also handles the needed clicks to move the rope.
+
+    It mainly calls from RopeAssembly for graphics, and also
+    handles scanning for the spacebar clicks to 'pull' the rope.
 */
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class GameCanvas extends JPanel {
-
 	RopeAssembly ropeAssembly;
 	Image currentScreen, bg, p1ws, p2ws;
 	int clicks, referenceClicks;
@@ -111,7 +115,7 @@ public class GameCanvas extends JPanel {
 			}
 		};
 		am.put("Spacebar Press", sc);
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true), "Spacebar Press"); // Decided to go for true dito kasi I noticed na you can kinda cheat by just holdiing the Spacebar down
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true), "Spacebar Press");
 	}
 
 	public void resetClicks(){

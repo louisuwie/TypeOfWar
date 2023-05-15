@@ -18,7 +18,10 @@
 */
 
 /*
-    GameCanvas.java handles the graphics-side of the program.
+    GameFrame.java handles the JFrame of the program.
+    It calls from the GameCanvas, and also communicates
+    with the server.
+
 */
 
 import javax.swing.*;
@@ -38,7 +41,6 @@ public class GameFrame {
 
     GameCanvas gameCanvas;
     JPanel startScreen;
-
     ReadFromServer rfsRunnable;
     WriteToServer wtsRunnable;
     Player player;

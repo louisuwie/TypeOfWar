@@ -18,7 +18,10 @@
 */
 
 /*
-    GameCanvas.java handles the graphics-side of the program.
+    GameStarter creates the GameFrame and connects to the server.
+    It also creates a timer that instantiates a new TypeRacer frame
+    every 10 seconds (The twist of the game).
+
 */
 
 // TODO Remove all debugging statements na! :D 
@@ -32,10 +35,10 @@ public class GameStarter {
         Scanner in = new Scanner(System.in);
         System.out.print("IP Address: ");
         String ip = in.next();
-        GameFrame gf = new GameFrame();
-        gf.connectToServer(ip);
-        gf.setUpGameFrame();
-        gf.setUpFrameTimers();
+        GameFrame gameFrame = new GameFrame();
+        gameFrame.connectToServer(ip);
+        gameFrame.setUpGameFrame();
+        gameFrame.setUpFrameTimers();
         in.close();
                 
         // Instantiates a new frame every 10 seconds, feel free to edit
@@ -43,9 +46,9 @@ public class GameStarter {
             @Override
             public void actionPerformed(ActionEvent e) {
             
-                GameCanvas gc = gf.getCanvas();
-                RopeAssembly ra = gc.getRopeAssembly();
-                int winner = ra.getWinner();
+                GameCanvas gameCanvas = gameFrame.getCanvas();
+                RopeAssembly ropeAssembly = gameCanvas.getRopeAssembly();
+                int winner = ropeAssembly.getWinner();
                 
                 if (winner == 0) {
                     TypeRacer typeRacer = new TypeRacer();
@@ -53,7 +56,6 @@ public class GameStarter {
                     typeRacer.startTypeRacerTimer();
                 }
             }
-            
         });
         timer.setRepeats(true);
         timer.start();
