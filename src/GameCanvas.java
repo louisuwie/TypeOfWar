@@ -31,7 +31,7 @@ public class GameCanvas extends JPanel {
 	int clicks, referenceClicks;
 	int velocity;
 
-	TypeRacer tr;
+	TypeRacer typeRacer;
     
     public GameCanvas() {
         setFocusable(true);
@@ -62,9 +62,15 @@ public class GameCanvas extends JPanel {
 					repaint();
 				}
 			});
-			timer.setRepeats(true);
-			timer.start();
-		
+
+			if(ropeAssembly.isThereAWinner()) {
+				velocity = 0;
+				ropeAssembly.gameOver();
+				timer.stop();
+			}else{
+				timer.setRepeats(true);
+				timer.start();
+			}
 	}
 	//Resets the number of clicks every 2 seconds. 
 	public void startClickTimer() {
@@ -75,8 +81,15 @@ public class GameCanvas extends JPanel {
 				clicks = 0;
 			}
 		});
-		clickTimer.setRepeats(true);
-		clickTimer.start();
+
+		if(ropeAssembly.isThereAWinner()) {
+			clicks = 0;
+			ropeAssembly.gameOver();
+			clickTimer.stop();
+		}else{
+			clickTimer.setRepeats(true);
+			clickTimer.start();
+		}
 	}
 
     public void addKeyBindings() {
@@ -90,9 +103,12 @@ public class GameCanvas extends JPanel {
 				clicks++;
 			}
 		};
-
 		am.put("Spacebar Press", sc);
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true), "Spacebar Press"); // Decided to go for true dito kasi I noticed na you can kinda cheat by just holdiing the Spacebar down
+	}
+
+	public void resetClicks(){
+		this.clicks = 0;
 	}
 
 	public int getClicks() {

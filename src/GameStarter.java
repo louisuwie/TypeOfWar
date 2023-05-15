@@ -37,14 +37,13 @@ public class GameStarter {
         gf.setUpFrameTimers();
         in.close();
         
-        TypeRacer tr = new TypeRacer();
+        TypeRacer typeRacer = new TypeRacer();
 
-        // Instantiates a new frame every 20 seconds, feel free to edit
-        Timer timer = new Timer(20000, new ActionListener() {
-
+        // Instantiates a new frame every 10 seconds, feel free to edit
+        Timer timer = new Timer(10000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                tr.initialize();
+                typeRacer.initialize();
             }
             
         });

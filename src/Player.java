@@ -30,29 +30,28 @@ public class Player {
     public Player(int id) {
         this.playerID = id;
         this.speed = 1;
-        this.low = 3;
-        this.med = 6;
-        this.high = 9;
+        this.low = 2;
+        this.med = 4;
+        this.high = 6;
     }
 
     public void calculateSpeed(int clicks) {
-        if (playerID == 1) {
-            if (clicks <= 1) {
-                speed = low * -1;
-            } else if (clicks <= 4) {
-                speed = med * -1;
-            } else if (clicks <= 8) {
-                speed = high * -1;
-            }
-        } else if (playerID == 2) {
-            if (clicks <= 1) {
-                speed = low;
-            } else if (clicks <= 4) {
-                speed = med;
-            } else if (clicks <= 8) {
-                speed = high;
-            }
+        if (clicks == 0) {
+            speed = 0;
         }
+        else if(clicks ==1) {
+            speed = low;
+        }
+        else if (clicks <= 4) {
+            speed = med;
+        } else if (clicks <= 8) {
+            speed = high;
+        }
+
+        if(playerID == 1){
+            speed = speed * -1;
+        }
+
     }
 
     public int getSpeed() {

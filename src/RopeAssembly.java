@@ -28,11 +28,12 @@ import javax.swing.ImageIcon;
 public class RopeAssembly {
     
 
-    Image gr, p1w, p2w, ss;
+    Image gr, p1w, p2w, ss, p1Won, p2Won;
     Image current;
     int x;
     static int winner;
     static int y = 270;
+    boolean thereIsWinner = false;
 
     // Fields are not final. This is where we import the Rope Assembly Graphics
 
@@ -45,6 +46,9 @@ public class RopeAssembly {
         p2w = new ImageIcon("DesignAssets/P2Win.PNG").getImage();
         ss = new ImageIcon("DesignAssets/SameSpeed.png").getImage();
 
+        p1Won = new ImageIcon("P1WinnerScreen.png").getImage();
+        p2Won = new ImageIcon("P2WinnerScreen.png").getImage();
+
         x = 140;
     }
 
@@ -53,13 +57,15 @@ public class RopeAssembly {
     }
 
     public void tug(int v) {
-        if(x == 360){
+        if(x > 360){
             winner = 2;
             System.out.println("Player 2 Wins!");
+            thereIsWinner = true;
+        } else if (x < 0) {
 
-        } else if (x == 0) {
             winner = 1;
             System.out.println("Player 1 Wins!");
+            thereIsWinner = true;
         }
         else{
             x += v;
@@ -75,7 +81,30 @@ public class RopeAssembly {
         }
     }
 
+    public void gameOver(){
+        if (thereIsWinner) {
+            if(x > 360){
+                x = 140;
+                winner = 2;
+                System.out.println("Player 2 Wins!");
+                thereIsWinner = true;
+                current = p2Won;
+            } else if (x < 0) {
+                x = 140;
+                winner = 1;
+                System.out.println("Player 1 Wins!");
+                thereIsWinner = true;
+                current = p1Won;
+            }
+        }
+    }
+
     public static int getWinner() {
         return winner;
     }
+
+    public boolean isThereAWinner() {
+        return thereIsWinner;
+    }
+
 }

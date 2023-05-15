@@ -32,7 +32,7 @@ import java.util.List;
 import java.awt.event.*;
 
 public class TypeRacer extends JFrame {
-
+    RopeAssembly ropeAssembly;
     private JTextField textField;
     private JLabel typeThis;
     boolean isCorrect = false;
@@ -83,29 +83,43 @@ public class TypeRacer extends JFrame {
         textField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
+                try {
+                    // check if the JTextField's word is equal to the target randomWord
+                    for (int i = 0; i < textField.getText().length(); i++) {
+                        if (textField.getText().charAt(i) == randomWord.charAt(i)) {
+                            if (textField.getText().equals(randomWord)) {
+                                isCorrect = true;
+                                System.out.println("Correct!");
 
-                // check if the JTextField's word is equal to the target randomWord
-                for (int i = 0; i < textField.getText().length(); i++) {
-                    if (textField.getText().charAt(i) == randomWord.charAt(i)) {
-                        if (textField.getText().equals(randomWord)) {
-                            isCorrect = true;
-                            System.out.println("Correct!");
-                            dispose();
+                                // Create a timer for the JFrame to close after 5 seconds.
+                                Timer timer = new Timer(5000, new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        dispose();
+                                    }
+                                });
+                                dispose();
+                            }
+                        } else {
+                            isCorrect = false;
+                            System.out.println("Incorrect!");
                         }
-
-                    } else {
-                        isCorrect = false;
-                        System.out.println("Incorrect!");
                     }
+                } catch (Exception ex) {
+                    // Handle the exception here (e.g., display an error message)
+                    System.out.println("An error occurred: " + ex.getMessage());
                 }
             }
 
             @Override
+            public void removeUpdate(DocumentEvent e) {
 
-            public void removeUpdate(DocumentEvent e) {}
+            }
 
             @Override
-            public void changedUpdate(DocumentEvent e) {}
+            public void changedUpdate(DocumentEvent e) {
+
+            }
         });
 
         // make the JFrame visible

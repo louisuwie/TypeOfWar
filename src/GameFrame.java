@@ -36,18 +36,20 @@ import java.net.*;
 
 public class GameFrame {
     int playerID, ropeSpeed;
+    private boolean gameEnded; // Flag to indicate if the game has ended
     JFrame gameFrame, endScreenFrame;
     JButton startButton;
     JLabel jl;
     Socket s;
     GameCanvas gameCanvas;
-    JPanel backGround;
+    JPanel backGround, endFrame;
     ReadFromServer rfsRunnable;
     WriteToServer wtsRunnable;
     Player player;
 
     public GameFrame() {
         this.gameFrame = new JFrame();
+        this.endFrame = new EndScreen();
         this.backGround = new StartScreen();
         this.gameCanvas = new GameCanvas();
         this.startButton = new JButton("Start");
@@ -59,16 +61,14 @@ public class GameFrame {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                     startButton.setVisible(false);
                     backGround.setVisible(false);
                     gameCanvas.addKeyBindings();
                     gameCanvas.startClickTimer();
                     gameCanvas.startRepaintTimer();
                     gameFrame.add(gameCanvas);
-
             }
-            
+
         });
 
         backGround.add(startButton);
@@ -111,19 +111,10 @@ public class GameFrame {
             if (playerID == 1) System.out.print("Waiting for Player #2 to connect."); // for Player 1 only
 
             if(RopeAssembly.getWinner() == 1) {
-                endScreenFrame = new JFrame();
-                endScreenFrame.add(new EndScreen());
-                System.out.println("Player 1 wins!");
-                backGround.setVisible(false);
-                endScreenFrame.setVisible(true);
-
+                gameFrame.add(endFrame);
 
             } else if(RopeAssembly.getWinner() == 2) {
-                endScreenFrame = new JFrame();
-                endScreenFrame.add(new EndScreen());
-                System.out.println("Player 2 wins!");
-                backGround.setVisible(false);
-                endScreenFrame.setVisible(true);
+                gameFrame.add(endFrame);
 
             } else {
                 System.out.println("No winner yet.");
@@ -131,8 +122,6 @@ public class GameFrame {
         } catch (Exception e) {
             System.out.println("Unable to connect to server.");
         }
-
-
     }
 
     private class ReadFromServer implements Runnable {

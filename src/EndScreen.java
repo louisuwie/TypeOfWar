@@ -36,10 +36,10 @@ public class EndScreen extends JPanel{
         backGround = new ImageIcon("Background").getImage();
 
         if(RopeAssembly.getWinner() == 1){
-            this.winnerIcon = new ImageIcon("DesignAssets/P1Win.PNG").getImage();
+            this.winnerIcon = new ImageIcon("DesignAssets/P1WinnerScreen").getImage();
             boolean chickenDinner = true;
         } else if (RopeAssembly.getWinner() == 2){
-            this.winnerIcon = new ImageIcon("DesignAssets/P2Win.PNG").getImage();
+            this.winnerIcon = new ImageIcon("DesignAssets/P2WinnerScreen").getImage();
             boolean chickenDinner = true;
         }
     }
