@@ -92,7 +92,7 @@ public class TypeRacer extends JFrame {
                                 System.out.println("Correct!");
 
                                 // Create a timer for the JFrame to close after 5 seconds.
-                                Timer timer = new Timer(5000, new ActionListener() {
+                                Timer timer = new Timer(3500, new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
                                         dispose();
