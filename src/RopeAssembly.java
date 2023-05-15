@@ -53,6 +53,7 @@ public class RopeAssembly {
     public void draw(Graphics2D g2d) {
         g2d.drawImage(current, x, y, width, 150, null);
         g2d.drawLine(480,432,480,540);
+        g2d.setColor(new Color(1,50,32));
     }
 
     public void tug(int v) {
