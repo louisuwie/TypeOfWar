@@ -52,6 +52,7 @@ public class RopeAssembly {
 
     public void draw(Graphics2D g2d) {
         g2d.drawImage(current, x, y, width, 150, null);
+        g2d.drawLine(480,0,480,200);
     }
 
     public void tug(int v) {
