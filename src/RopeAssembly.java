@@ -31,18 +31,18 @@ public class RopeAssembly {
     Image current;
     int x;
     int winner;
-    static int y = 270;
+    static int y = 310;
     int width = 400;
     boolean thereIsWinner = false;
 
     // TODO Modify the WIDTH and HEIGHT of the rope assembly based on new File
     public RopeAssembly() {
-        gr = new ImageIcon("DesignAssets/GetReady.PNG").getImage();
+        gr = new ImageIcon("Guy_wins.png").getImage();
         current = gr;
 
-        p1w = new ImageIcon("DesignAssets/P1Win.PNG").getImage();
-        p2w = new ImageIcon("DesignAssets/P2Win.PNG").getImage();
-        ss = new ImageIcon("DesignAssets/SameSpeed.png").getImage();
+        p1w = new ImageIcon("GirlWin.png").getImage();
+        p2w = new ImageIcon("GuyWin.png").getImage();
+        ss = new ImageIcon("Struggling.png").getImage();
 
         p1Won = new ImageIcon("P1WinnerScreen.png").getImage();
         p2Won = new ImageIcon("P2WinnerScreen.png").getImage();
@@ -51,7 +51,7 @@ public class RopeAssembly {
     }
 
     public void draw(Graphics2D g2d) {
-        g2d.drawImage(current, x, y, width, 200, null);
+        g2d.drawImage(current, x, y, width, 150, null);
     }
 
     public void tug(int v) {

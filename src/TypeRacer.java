@@ -49,7 +49,7 @@ public class TypeRacer extends JFrame {
         setTitle("TypeRacer");
         setLayout(null);
         setSize(300,150);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(false);
 
