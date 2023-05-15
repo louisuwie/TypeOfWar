@@ -1,6 +1,3 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
 /**
  @author Louis G. Binwag III (200747) & Maria Charmane Rose E. Naciongayo (214152)
  @version April 25, 2023
@@ -23,23 +20,66 @@ import java.awt.event.*;
 /*
     GameCanvas.java handles the graphics-side of the program.
 */
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
-public class GameCanvas extends JComponent{
+public class GameCanvas extends JPanel {
 
-	// Graphics-side code here, maybe import all the graphics-related files such as img, sound, gif, etc.
-	public GameCanvas() {
-		setPreferredSize(new Dimension(1000,1000)); // Numbers are placeholders!
-		setFocusable(true);
-	}
+	RopeAssembly ropeAssembly;
+	Image bg, op;
+	int clicks, referenceClicks;
+	int velocity;
 
-	@Override
-    protected void paintComponent(Graphics g2d) {
-		// Just some tester graphics!
-		g2d.setColor(Color.PINK);
-        g2d.fillRect(100,100, 100, 100);
+	TypeRacer tr;
+    
+    public GameCanvas() {
+        setFocusable(true);
+        setPreferredSize(new Dimension(1900,1080));
+		velocity = 0;
+		ropeAssembly = new RopeAssembly();
+		bg = new ImageIcon("DesignAssets/Background.png").getImage();
     }
 
-	public void addKeyBindings() {
+
+	// Paint Component, shows the background and all.
+	@Override
+	protected void paintComponent(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g; // Cast into a g2d Object
+
+		g2d.drawImage(bg, 0, 0, 960, 540, null);
+		g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
+		ropeAssembly.draw(g2d);
+	}
+
+	// Repaints every 100ms
+	public void startRepaintTimer() {
+			Timer timer = new Timer(100, new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					ropeAssembly.resetRopeAssembly(velocity); // Change the sprite
+					ropeAssembly.tug(velocity); // Update the position
+					repaint();
+				}
+			});
+			timer.setRepeats(true);
+			timer.start();
+		
+	}
+	//Resets the number of clicks every 2 seconds. 
+	public void startClickTimer() {
+		Timer clickTimer = new Timer(1000, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				referenceClicks = clicks;
+				clicks = 0;
+			}
+		});
+		clickTimer.setRepeats(true);
+		clickTimer.start();
+	}
+
+    public void addKeyBindings() {
 		ActionMap am = getActionMap();
 		InputMap im = getInputMap();
 
@@ -47,12 +87,19 @@ public class GameCanvas extends JComponent{
 		AbstractAction sc = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				// Code to be executed when spacebar is pressed!
+				clicks++;
 			}
 		};
 
-		// Creating the Action
 		am.put("Spacebar Press", sc);
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "Spacebar Press");
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true), "Spacebar Press"); // Decided to go for true dito kasi I noticed na you can kinda cheat by just holdiing the Spacebar down
+	}
+
+	public int getClicks() {
+		return referenceClicks;
+	}
+
+	public void passVelocity(int s) {
+		this.velocity = s;
 	}
 }
