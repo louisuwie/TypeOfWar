@@ -18,42 +18,46 @@
 */
 
 /*
-    GameStarter.java instantiates the game for the Player Side.
+    GameStarter creates the GameFrame and connects to the server.
+    It also creates a timer that instantiates a new TypeRacer frame
+    every 10 seconds (The twist of the game).
+
 */
 
-import java.net.*;
-import java.io.*;
-import java.awt.event.*;
+// TODO Remove all debugging statements na! :D 
+import java.util.Scanner;
 import javax.swing.*;
+import java.awt.event.*;
 
-public class GameStarter implements Runnable {
+public class GameStarter {
 
-	Player p = new Player();
-	public static void main(String[] args) {
-		// Setting up the socket for the Player instance
-		// TODO Make an input thingy for the IP Address (in console)
-		try {
-			try (Socket s = new Socket("54.208.43.191", 2000)) {
-				DataInputStream in = new DataInputStream(s.getInputStream());
-				DataOutputStream out = new DataOutputStream(s.getOutputStream());
-			}
-		} catch (Exception e) {
-			System.out.print("Unable to connect to game.");
-		}
-	}
-
-	@Override
-	public void run() {
-		Timer typeTimer = new Timer(1000, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				// There should be something that counts the clicks while the timer is running
-				p.resetSpeed(0); // Variable for number of clicks will replace the 0
-			}
-		});
-		typeTimer.start();
-	}
-
-	//TODO create a client code here, must be able to instantiate a client- for both player and client side
-
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        System.out.print("IP Address: ");
+        String ip = in.next();
+        GameFrame gameFrame = new GameFrame();
+        gameFrame.connectToServer(ip);
+        gameFrame.setUpGameFrame();
+        gameFrame.setUpFrameTimers();
+        in.close();
+                
+        // Instantiates a new frame every 10 seconds, feel free to edit
+        Timer timer = new Timer(10000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            
+                GameCanvas gameCanvas = gameFrame.getCanvas();
+                RopeAssembly ropeAssembly = gameCanvas.getRopeAssembly();
+                int winner = ropeAssembly.getWinner();
+                
+                if (winner == 0) {
+                    TypeRacer typeRacer = new TypeRacer();
+                    typeRacer.initialize();
+                    typeRacer.startTypeRacerTimer();
+                }
+            }
+        });
+        timer.setRepeats(true);
+        timer.start();
+    }
 }

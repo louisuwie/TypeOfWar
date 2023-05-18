@@ -1,6 +1,3 @@
-import java.awt.event.*;
-import javax.swing.*;;
-
 /**
  @author Louis G. Binwag III (200747) & Maria Charmane Rose E. Naciongayo (214152)
  @version April 25, 2023
@@ -21,31 +18,45 @@ import javax.swing.*;;
 */
 
 /*
-    Player.java handles the program for the player-end. It is the one that
-    communicates with the host server.
+    Player.java handles the player-side of the program.
+    It handles the respective information of each player.
+    Like playerID and Speed.
 */
 
 public class Player {
+    
+    int playerID;
+    int low, med, high;
+    int speed;
 
-	private int speed;
-	private int clicks;
+    public Player(int id) {
+        this.playerID = id;
+        this.speed = 1;
+        this.low = 2;
+        this.med = 4;
+        this.high = 6;
+    }
 
-	public Player() {
-		this.speed = 1;
-		this.clicks = 1;
-	}
+    public void calculateSpeed(int clicks) {
+        if (clicks == 0) {
+            speed = 0;
+        }
+        else if(clicks ==1) {
+            speed = low;
+        }
+        else if (clicks <= 4) {
+            speed = med;
+        } else if (clicks <= 8) {
+            speed = high;
+        }
 
-	// Methods for mutating
-	public void resetSpeed(int clicks) {
-		speed = clicks * 3;
-	}
+        if(playerID == 1){
+            speed = speed * -1;
+        }
 
-	// Some Accessor Methods
-	public int getSpeed() {
-		return speed;
-	}
+    }
 
-	public int getClicks() {
-		return clicks;
-	}
+    public int getSpeed() {
+        return speed;
+    }
 }

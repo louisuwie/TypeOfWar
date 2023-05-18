@@ -1,6 +1,3 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
 /**
  @author Louis G. Binwag III (200747) & Maria Charmane Rose E. Naciongayo (214152)
  @version April 25, 2023
@@ -22,24 +19,91 @@ import java.awt.event.*;
 
 /*
     GameCanvas.java handles the graphics-side of the program.
+    It interacts with different classes to display the game,
+    and it also handles the needed clicks to move the rope.
+
+    It mainly calls from RopeAssembly for graphics, and also
+    handles scanning for the spacebar clicks to 'pull' the rope.
 */
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
-public class GameCanvas extends JComponent{
+public class GameCanvas extends JPanel {
+	RopeAssembly ropeAssembly;
+	Image currentScreen, bg, p1ws, p2ws;
+	int clicks, referenceClicks;
+	int velocity;
 
-	// Graphics-side code here, maybe import all the graphics-related files such as img, sound, gif, etc.
-	public GameCanvas() {
-		setPreferredSize(new Dimension(1000,1000)); // Numbers are placeholders!
-		setFocusable(true);
-	}
+	TypeRacer typeRacer;
+    
+    public GameCanvas() {
+        setFocusable(true);
+		velocity = 0;
+		ropeAssembly = new RopeAssembly();
+		
+		bg = new ImageIcon("DesignAssets/Background.png").getImage();
+		p1ws = new ImageIcon("DesignAssets/P1WinnerScreen.png").getImage();
+		p2ws = new ImageIcon("DesignAssets/P2WinnerScreen.jpeg").getImage();
 
-	@Override
-    protected void paintComponent(Graphics g2d) {
-		// Just some tester graphics!
-		g2d.setColor(Color.PINK);
-        g2d.fillRect(100,100, 100, 100);
+		currentScreen = bg;
     }
 
-	public void addKeyBindings() {
+
+	// Paint Component, shows the background and all.
+	@Override
+	protected void paintComponent(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g; // Cast into a g2d Object
+		g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
+		
+		if (ropeAssembly.getX() > 960/2 || ropeAssembly.getX() + ropeAssembly.getWidth() < 960/2) {
+			if (ropeAssembly.getX() > 960/2) {
+				currentScreen = p2ws;
+				ropeAssembly.setWinner(2);
+				g2d.drawImage(currentScreen, 0, 0, 960, 540, null);
+			} else if (ropeAssembly.getX() + ropeAssembly.getWidth() < 960/2) {
+				currentScreen = p1ws;
+				ropeAssembly.setWinner(1);
+				g2d.drawImage(currentScreen, 0, 0, 960, 540, null);
+			}
+		} else {
+			currentScreen = bg;
+			g2d.drawImage(currentScreen, 0, 0, 960, 540, null);
+			ropeAssembly.draw(g2d);
+		}
+	}
+
+	// Repaints every 100ms
+	public void startRepaintTimer() {
+			Timer timer = new Timer(100, new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (ropeAssembly.getWinner() == 0) {
+						ropeAssembly.resetRopeAssembly(velocity); // Change the sprite
+						ropeAssembly.tug(velocity); // Update the position
+						repaint();
+					} else {
+						repaint();
+					} 
+				}
+			});
+			timer.setRepeats(true);
+			timer.start();
+	}
+	//Resets the number of clicks every 2 seconds. 
+	public void startClickTimer() {
+		Timer clickTimer = new Timer(1000, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				referenceClicks = clicks;
+				clicks = 0;
+			}
+		});
+		clickTimer.setRepeats(true);
+		clickTimer.start();
+	}
+
+    public void addKeyBindings() {
 		ActionMap am = getActionMap();
 		InputMap im = getInputMap();
 
@@ -47,12 +111,26 @@ public class GameCanvas extends JComponent{
 		AbstractAction sc = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				// Code to be executed when spacebar is pressed!
+				clicks++;
 			}
 		};
-
-		// Creating the Action
 		am.put("Spacebar Press", sc);
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "Spacebar Press");
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true), "Spacebar Press");
+	}
+
+	public void resetClicks(){
+		this.clicks = 0;
+	}
+
+	public int getClicks() {
+		return referenceClicks;
+	}
+
+	public void passVelocity(int s) {
+		this.velocity = s;
+	}
+
+	public RopeAssembly getRopeAssembly() {
+		return ropeAssembly;
 	}
 }

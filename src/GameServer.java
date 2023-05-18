@@ -18,54 +18,167 @@
 */
 
 /*
-    GameServer.java instantiates the server and starts the game. This instantiates for the Hosts' side.
-*/
-
-/* LAUNCH TERMINAL AT PEM FOLDER
- * TYPE chmod 400 TestKey001.pem
- * ssh -i "TestKey001.pem" ec2-user@ec2-54-208-43-191.compute-1.amazonaws.com
- * install Git
- * git clone https://github.com/louisuwie/TypeOfWar.git
- * install then run Java
- * Compile game files
- * Run1!!!! YAYYY
+    GameServer handles the server-side of the program. It instantiates the amount
+    of players (max of 2) and handles the communication between the two players.
 */
 
 import java.io.*;
 import java.net.*;
 
+import java.awt.event.*;
+import javax.swing.Timer;
+
 public class GameServer {
-    public static void main(String[] args) throws IOException {
-        
-		// Add server code here, must be able to instantiate a server- for both player and client side
-		ServerSocket ss = new ServerSocket(2000); // Not too sure about the port number!
-		
-		// Initializing Input and Output streams for the two Player sockets
-		Socket sp1 = ss.accept();
-		DataInputStream in1 = new DataInputStream(sp1.getInputStream());
-		DataOutputStream out1 = new DataOutputStream(sp1.getOutputStream());
-		System.out.println("Player 1 connected. Waiting for Player 2..."); // System output muna! Not yet sure how to display this HAHA
-		Socket sp2 = ss.accept();
-		DataInputStream in2 = new DataInputStream(sp2.getInputStream());
-		DataOutputStream out2 = new DataOutputStream(sp2.getOutputStream());
-		System.out.println("Player 2 connected. Launching game.");
 
-		// Casting into threads
-		GameStarter p1 = new GameStarter();
-		GameStarter p2 = new GameStarter();
-		Thread t1 = new Thread(p1);
-		Thread t2 = new Thread(p2);
+    ServerSocket ss;
+    Socket s1, s2;
+    int maxPlayers, numPlayers;
 
-		GameFrame runGame = new GameFrame(); // This should open up the frame after both
+    private ReadFromClient p1ReadRunnable, p2ReadRunnable;
+    private WriteToClient p1WriteRunnable, p2WriteRunnable;
 
-		// This should start the client threads as soon as either player hits START.
-		if (runGame.getGameVisibility()) {
-			t1.start();
-			t2.start();
-		}
+    private int p1Speed, p2Speed;
+    private int ropeSpeed;
 
-		// End of prgram
-        ss.close();
+    public GameServer() {
 
-	}
+        numPlayers = 0;
+        maxPlayers = 2;
+
+        try {
+            ss = new ServerSocket(2000);
+            System.out.println("Initialized server.");
+        } catch (Exception e) {
+            System.out.println("Failed to initialize server.");
+        }
+    }
+
+    public void acceptConnections() {
+        try {
+            while (numPlayers < maxPlayers) {
+                Socket s = ss.accept();
+                DataOutputStream out = new DataOutputStream(s.getOutputStream());
+                DataInputStream in = new DataInputStream(s.getInputStream()); // Not sure if this is needed.
+                numPlayers++;
+                out.writeInt(numPlayers);
+                System.out.println("Player #" + numPlayers + " has connected.");
+                ReadFromClient rfc = new ReadFromClient(numPlayers, in);
+                WriteToClient wtc = new WriteToClient(numPlayers, out);
+
+                if (numPlayers == 1) {
+                    s1 = s;
+                    p1ReadRunnable = rfc;
+                    p1WriteRunnable = wtc;
+                } else if (numPlayers == 2) {
+                    s2 = s;
+                    p2ReadRunnable = rfc;
+                    p2WriteRunnable = wtc;
+
+                    // At this point, there are 2 players connected already.
+                    p1WriteRunnable.sendStartMessage();
+                    p2WriteRunnable.sendStartMessage();
+                    
+                    // Start the threads
+                    Thread read1 = new Thread(p1ReadRunnable);
+                    Thread read2 = new Thread(p2ReadRunnable);
+                    read1.start();
+                    read2.start();
+                    Thread write1 = new Thread(p1WriteRunnable);
+                    Thread write2 = new Thread(p2WriteRunnable);
+                    write1.start();
+                    write2.start();
+                }
+            }
+            System.out.println("No longer accepting players.");
+        } catch (Exception e) {
+            System.out.println("Failed to accept connections.");
+        }
+    }
+
+    // Inner Classes
+    private class ReadFromClient implements Runnable {
+
+        private int playerID;
+        private DataInputStream in;
+
+        public ReadFromClient(int p, DataInputStream d) {
+            playerID = p;
+            in = d;
+            System.out.println("RFC" + playerID + " Runnable created.");
+        }
+        // This run() method continuously reads the clicks sent from GameCanvas and assigns it to speed variables foe ach of the players.
+        @Override
+        public void run() {
+
+            try {
+                while (true) {
+                    if (playerID == 1) {
+                        p1Speed = in.readInt();
+                    } else if (playerID == 2) {
+                        p2Speed = in.readInt();
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("RFC run() failed.");
+            }
+        }
+    }
+
+    private class WriteToClient implements Runnable {
+
+        private int playerID;
+        private DataOutputStream out;
+        public WriteToClient(int p, DataOutputStream d) {
+            playerID = p;
+            out = d;
+            System.out.println("WTC" + playerID + " Runnable created.");
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    out.writeInt(ropeSpeed);
+                    out.flush();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        System.out.println("Thread interrupted");
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("WTC Run failed.");
+            }
+        }
+
+        public void sendStartMessage() {
+            try {
+               out.writeUTF("We now have 2 players."); 
+            } catch (IOException e) {
+                System.out.println("IO Exception from sendStartMessage");
+            }
+        }
+    }
+    public void startServerTimer() {
+        Timer speedCalculator = new Timer(50, new ActionListener() {
+    
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Calculate and set new rope speed based on current speeds sa Read
+                ropeSpeed = p1Speed + p2Speed; 
+            }
+            
+        });
+        speedCalculator.setRepeats(true);
+        speedCalculator.start();
+    }
+
+    // Method for starting threads
+
+    public static void main(String args[]) {
+        GameServer gs = new GameServer();
+        gs.acceptConnections();
+        gs.startServerTimer();
+    }
+
 }
